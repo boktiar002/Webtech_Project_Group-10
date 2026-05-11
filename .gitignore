@@ -1,0 +1,4 @@
+public/uploads/avatars/*
+public/uploads/articles/*
+!public/uploads/avatars/.gitkeep
+!public/uploads/articles/.gitkeep
