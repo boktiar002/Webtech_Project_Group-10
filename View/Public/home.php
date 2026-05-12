@@ -1,6 +1,6 @@
 <div class="container">
 
-    <h2 style="margin-bottom: 20px;">Latest Articles</h2>
+    <h2 class="section-title">Latest Articles</h2>
 
     <!-- Category Filter Tabs -->
     <div id="category-tabs" style="margin-bottom: 24px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -78,7 +78,7 @@ function filterCategory(btn, categoryId) {
             }
             grid.innerHTML = articles.map(a => `
                 <div class="card">
-                    <img src="${a.featured_image_path ? 'public/uploads/articles/' + a.featured_image_path : 'https://placehold.co/400x180'}" alt="">
+                    <img src="${a.featured_image_path ? 'Public/uploads/articles/' + a.featured_image_path : 'https://placehold.co/400x180'}" alt="">
                     <div class="card-body">
                         <h3><a href="index.php?page=article&id=${a.id}">${a.title}</a></h3>
                         <div class="card-meta">

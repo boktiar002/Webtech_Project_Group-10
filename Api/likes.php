@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once __DIR__ . '/../models/Like.php';
+require_once __DIR__ . '/../Model/Like.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 

@@ -1,7 +1,6 @@
 <?php
-session_start();
-require_once __DIR__ . '/../models/Article.php';
-require_once __DIR__ . '/../models/Like.php';
+require_once __DIR__ . '/../Model/Article.php';
+require_once __DIR__ . '/../Model/Like.php';
 
 class PublicController {
 
@@ -9,18 +8,19 @@ class PublicController {
     private $likeModel;
 
     public function __construct() {
+        // Model classes are created once and reused for each request.
         $this->articleModel = new Article();
         $this->likeModel = new Like();
     }
 
-    // homepage
+    // Render the homepage with categories and published articles.
     public function home() {
         $this->articleModel->publishScheduled();
         $categories = $this->articleModel->getCategories();
         $articles = $this->articleModel->getPublished();
-        include __DIR__ . '/../views/layouts/header.php';
-        include __DIR__ . '/../views/public/home.php';
-        include __DIR__ . '/../views/layouts/footer.php';
+        include __DIR__ . '/../View/Layouts/header.php';
+        include __DIR__ . '/../View/Public/home.php';
+        include __DIR__ . '/../View/Layouts/footer.php';
     }
 
     // article reading page
@@ -32,8 +32,8 @@ class PublicController {
         }
         $this->articleModel->incrementView($id);
         $tags = $this->articleModel->getTags($id);
-        include __DIR__ . '/../views/layouts/header.php';
-        include __DIR__ . '/../views/public/article.php';
-        include __DIR__ . '/../views/layouts/footer.php';
+        include __DIR__ . '/../View/Layouts/header.php';
+        include __DIR__ . '/../View/Public/article.php';
+        include __DIR__ . '/../View/Layouts/footer.php';
     }
 }

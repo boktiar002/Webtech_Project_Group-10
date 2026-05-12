@@ -57,7 +57,7 @@ class Article {
     public function getTags($article_id) {
         $stmt = $this->pdo->prepare("
             SELECT t.name FROM tags t
-            JOIN article_tags art ON t.id = at.tag_id
+            JOIN article_tags at ON t.id = at.tag_id
             WHERE at.article_id = ?
         ");
         $stmt->execute([$article_id]);

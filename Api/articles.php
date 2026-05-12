@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../models/Article.php';
+require_once __DIR__ . '/../Model/Article.php';
 
 $articleModel = new Article();
 $articleModel->publishScheduled();
