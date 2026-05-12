@@ -1,3 +1,4 @@
+
 <?php
 require_once __DIR__ . '/../Model/Article.php';
 require_once __DIR__ . '/../Model/Like.php';
@@ -37,3 +38,4 @@ class PublicController {
         include __DIR__ . '/../View/Layouts/footer.php';
     }
 }
+
