@@ -57,7 +57,7 @@ class Article {
     public function getTags($article_id) {
         $stmt = $this->pdo->prepare("
             SELECT t.name FROM tags t
-            JOIN article_tags at ON t.id = at.tag_id
+            JOIN article_tags art ON t.id = at.tag_id
             WHERE at.article_id = ?
         ");
         $stmt->execute([$article_id]);
@@ -80,7 +80,7 @@ class Article {
             u.name AS author_name
             FROM articles a
             LEFT JOIN users u ON a.author_id = u.id
-            LEFT JOIN article_tags at ON a.id = at.article_id
+            LEFT JOIN article_tags art ON a.id = at.article_id
             LEFT JOIN tags t ON at.tag_id = t.id
             WHERE a.status = 'published'
             AND (a.title LIKE ? OR t.name LIKE ?)

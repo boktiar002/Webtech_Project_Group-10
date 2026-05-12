@@ -53,4 +53,59 @@
     <div style="background:white; padding:30px; border-radius:10px;
         box-shadow:0 2px 8px rgba(0,0,0,0.08); line-height:1.8;
         font-size:16px; margin-bottom:30px;">
-        <?= nl2br(htmlspecialchars(
+        <?= nl2br(htmlspecialchars($article['body'])) ?>
+    </div>
+
+    <!-- Like Button -->
+    <div style="margin-bottom:40px;">
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <button id="like-btn" onclick="toggleLike(<?= $article['id'] ?>)"
+                style="background:#1a1a2e; color:white; border:none;
+                padding:10px 24px; border-radius:20px; cursor:pointer; font-size:15px;">
+                ❤️ <span id="like-count"><?= $article['like_count'] ?></span> Likes
+            </button>
+        <?php else: ?>
+            <a href="login.php" style="background:#1a1a2e; color:white;
+                padding:10px 24px; border-radius:20px; text-decoration:none; font-size:15px;">
+                ❤️ <?= $article['like_count'] ?> Likes — Login to like
+            </a>
+        <?php endif; ?>
+    </div>
+
+    <!-- Comments Section (Task 4 renders here) -->
+    <div id="comments-section">
+        <h3 style="margin-bottom:16px;">Comments</h3>
+        <p style="color:#888;">Comments loaded by Task 4.</p>
+    </div>
+
+</div>
+
+<style>
+    #like-btn { transition: transform 0.1s; }
+    #like-btn:active { transform: scale(0.95); }
+    #like-btn.liked { background: #e74c3c; }
+</style>
+
+<script>
+function toggleLike(articleId) {
+    fetch('api/likes.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ article_id: articleId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const btn = document.getElementById('like-btn');
+        const countSpan = document.getElementById('like-count');
+        countSpan.textContent = data.count;
+        if (data.liked) {
+            btn.classList.add('liked');
+            btn.childNodes[0].textContent = '❤️ ';
+        } else {
+            btn.classList.remove('liked');
+            btn.childNodes[0].textContent = '🤍 ';
+        }
+    })
+    .catch(() => alert('Something went wrong. Try again.'));
+}
+</script>
