@@ -2,7 +2,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$db   = 'blog_news_platform';
+$db   = 'blog_news_project';
 
 
 try {
