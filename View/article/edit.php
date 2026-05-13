@@ -5,7 +5,7 @@ $conn = new mysqli("localhost", "root", "", "blog_news_project");
 $id = $_GET['id'];
 
 
-// 🔵 UPDATE
+
 if($_POST){
 
     $title = $_POST['title'];
@@ -22,8 +22,6 @@ if($_POST){
     echo "<a href='dashboard.php'>Go To Dashboard</a>";
 }
 
-
-// 🔵 OLD DATA LOAD
 $sql = "SELECT * FROM articles WHERE id=$id";
 
 $result = $conn->query($sql);

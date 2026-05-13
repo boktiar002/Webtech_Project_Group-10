@@ -3,16 +3,14 @@ $conn = new mysqli("localhost", "root", "", "blog_news_project");
 
 if($_POST){
 
-    // 🔵 STEP 1: data collect (আগে এটা হবে)
+
     $title = $_POST['title'];
     $body  = $_POST['body'];
     $tags  = $_POST['tags'];
 
-    // 🔵 STEP 2: SQL query
     $sql = "INSERT INTO articles(title, body)
         VALUES('$title', '$body')";
 
-    // 🔵 STEP 3: run query
     $conn->query($sql);
 
     echo "Article saved successfully";
