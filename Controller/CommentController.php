@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 require_once __DIR__ . '/../models/Comment.php';
 
@@ -49,3 +50,5 @@ class CommentController {
         }
     }
 }
+=======
+>>>>>>> 3858bd3f316c8c63d61564f241e12d11ff6e6298
