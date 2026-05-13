@@ -1,9 +1,10 @@
 <?php
 session_start();
+<<<<<<< HEAD
 $_SESSION['user_id'] = 1;
 $_SESSION['role'] = 'admin'; 
 
-require_once 'config/database.php';
+require_once 'Model/database.php';
 require_once 'models/Article.php';
 require_once 'models/Comment.php';
 require_once 'models/Report.php';
@@ -56,3 +57,37 @@ $article_id = 1;
 
 </body>
 </html>
+=======
+
+// Read the query string to decide which page to show.
+$page = $_GET['page'] ?? 'home';
+$id   = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+require_once __DIR__ . '/Controller/PublicController.php';
+$controller = new PublicController();
+
+switch ($page) {
+    case 'home':
+        // Show the homepage with published articles.
+        $controller->home();
+        break;
+
+    case 'article':
+        // Show one article if an ID is present.
+        if ($id) {
+            $controller->article($id);
+        } else {
+            header('Location: index.php');
+        }
+        break;
+
+    case 'author':
+        // Author profile page, handled by Task 1.
+        include __DIR__ . '/views/authors/profile.php';
+        break;
+
+    default:
+        header('Location: index.php');
+        break;
+}
+>>>>>>> a7c8334355be01fd096381bce3591aded537564c
