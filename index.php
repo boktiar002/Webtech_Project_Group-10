@@ -1,6 +1,5 @@
 <?php
 session_start();
-<<<<<<< HEAD
 $_SESSION['user_id'] = 1;
 $_SESSION['role'] = 'admin'; 
 
@@ -57,7 +56,6 @@ $article_id = 1;
 
 </body>
 </html>
-=======
 
 // Read the query string to decide which page to show.
 $page = $_GET['page'] ?? 'home';
@@ -90,4 +88,3 @@ switch ($page) {
         header('Location: index.php');
         break;
 }
->>>>>>> a7c8334355be01fd096381bce3591aded537564c
