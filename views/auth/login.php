@@ -8,6 +8,10 @@
 
 <h2>Login Form</h2>
 
+<p>
+Enter your email and password to continue
+</p>
+
 <form action="../../controllers/AuthController.php" method="POST">
 
     <label>Email</label><br>
