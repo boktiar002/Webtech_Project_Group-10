@@ -1,0 +1,11 @@
+{
+    "site_name": "BlogNews Platform",
+    "site_description": "A multi-author blog and news platform",
+    "contact_email": "admin@blognews.com",
+    "social_links": {
+        "facebook": "https://facebook.com",
+        "twitter": "https://twitter.com"
+    },
+    "articles_per_page": 6,
+    "max_upload_size_mb": 3
+}

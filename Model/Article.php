@@ -1,112 +1,145 @@
-
 <?php
-require_once __DIR__ . '/Database.php';
 
 class Article {
+    private $connection;
 
-    private $pdo;
-
-    public function __construct() {
-        global $pdo;
-        $this->pdo = $pdo;
+<<<<<<< HEAD
+    function __construct() {
+        $db = new db();
+        $this->connection = $db->connection();
     }
 
-    // get latest published articles
-    public function getPublished($category_id = null) {
+    // get all published articles, optional category filter
+    function getPublished($category_id = null) {
         if ($category_id) {
-            $stmt = $this->pdo->prepare("
-                SELECT a.*, u.name AS author_name, u.profile_pic_path, c.name AS category_name,
-                (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
-                FROM articles a
-                LEFT JOIN users u ON a.author_id = u.id
-                LEFT JOIN categories c ON a.category_id = c.id
-                WHERE a.status = 'published' AND a.category_id = ?
-                ORDER BY a.created_at DESC
-            ");
-            $stmt->execute([$category_id]);
+            $sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
+                    c.name AS category_name,
+                    (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
+                    FROM articles a
+                    LEFT JOIN users u ON a.author_id = u.id
+                    LEFT JOIN categories c ON a.category_id = c.id
+                    WHERE a.status = 'published' AND a.category_id = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->bind_param("i", $category_id);
         } else {
-            $stmt = $this->pdo->prepare("
-                SELECT a.*, u.name AS author_name, u.profile_pic_path, c.name AS category_name,
-                (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
-                FROM articles a
-                LEFT JOIN users u ON a.author_id = u.id
-                LEFT JOIN categories c ON a.category_id = c.id
-                WHERE a.status = 'published'
-                ORDER BY a.created_at DESC
-            ");
-            $stmt->execute();
+            $sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
+                    c.name AS category_name,
+                    (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
+                    FROM articles a
+                    LEFT JOIN users u ON a.author_id = u.id
+                    LEFT JOIN categories c ON a.category_id = c.id
+                    WHERE a.status = 'published'
+                    ORDER BY a.created_at DESC";
+            $statement = $this->connection->prepare($sql);
         }
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // get single article by id
-    public function getById($id) {
-        $stmt = $this->pdo->prepare("
-            SELECT a.*, u.name AS author_name, u.profile_pic_path, u.bio AS author_bio,
-            c.name AS category_name,
-            (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
-            FROM articles a
-            LEFT JOIN users u ON a.author_id = u.id
-            LEFT JOIN categories c ON a.category_id = c.id
-            WHERE a.id = ? AND a.status = 'published'
-        ");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    function getById($id) {
+        $sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
+                c.name AS category_name,
+                (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
+                FROM articles a
+                LEFT JOIN users u ON a.author_id = u.id
+                LEFT JOIN categories c ON a.category_id = c.id
+                WHERE a.id = ? AND a.status = 'published'";
+        $statement = $this->connection->prepare($sql);
+        $statement->bind_param("i", $id);
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result->fetch_assoc();
     }
 
     // get tags for an article
-    public function getTags($article_id) {
-        $stmt = $this->pdo->prepare("
-            SELECT t.name FROM tags t
-            JOIN article_tags at ON t.id = at.tag_id
-            WHERE at.article_id = ?
-        ");
-        $stmt->execute([$article_id]);
-        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    function getTags($article_id) {
+        $sql = "SELECT t.name FROM tags t
+                JOIN article_tags art ON t.id = art.tag_id
+                WHERE art.article_id = ?";
+        $statement = $this->connection->prepare($sql);
+        $statement->bind_param("i", $article_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        $tags = [];
+        while ($row = $result->fetch_assoc()) {
+            $tags[] = $row['name'];
+        }
+        return $tags;
     }
 
     // increment view count
-    public function incrementView($id) {
-        $stmt = $this->pdo->prepare("
-            UPDATE articles SET view_count = view_count + 1 WHERE id = ?
-        ");
-        $stmt->execute([$id]);
+    function incrementView($id) {
+        $sql = "UPDATE articles SET view_count = view_count + 1 WHERE id = ?";
+        $statement = $this->connection->prepare($sql);
+        $statement->bind_param("i", $id);
+        $statement->execute();
     }
 
     // search articles by title or tag
-    public function search($q) {
+    function search($q) {
         $like = '%' . $q . '%';
-        $stmt = $this->pdo->prepare("
-            SELECT DISTINCT a.id, a.title, a.featured_image_path, a.created_at,
-            u.name AS author_name
-            FROM articles a
-            LEFT JOIN users u ON a.author_id = u.id
-            LEFT JOIN article_tags art ON a.id = at.article_id
-            LEFT JOIN tags t ON at.tag_id = t.id
-            WHERE a.status = 'published'
-            AND (a.title LIKE ? OR t.name LIKE ?)
-            LIMIT 8
-        ");
-        $stmt->execute([$like, $like]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT DISTINCT a.id, a.title, a.created_at, u.name AS author_name
+                FROM articles a
+                LEFT JOIN users u ON a.author_id = u.id
+                LEFT JOIN article_tags art ON a.id = art.article_id
+                LEFT JOIN tags t ON art.tag_id = t.id
+                WHERE a.status = 'published'
+                AND (a.title LIKE ? OR t.name LIKE ?)
+                LIMIT 8";
+        $statement = $this->connection->prepare($sql);
+        $statement->bind_param("ss", $like, $like);
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // get all categories
-    public function getCategories() {
-        $stmt = $this->pdo->prepare("SELECT * FROM categories");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    function getCategories() {
+        $sql = "SELECT * FROM categories";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // publish scheduled articles
-    public function publishScheduled() {
-        $stmt = $this->pdo->prepare("
-            UPDATE articles SET status = 'published'
-            WHERE status = 'draft'
-            AND publish_at IS NOT NULL
-            AND publish_at <= NOW()
-        ");
+    function publishScheduled() {
+        $sql = "UPDATE articles SET status = 'published'
+                WHERE status = 'draft'
+                AND publish_at IS NOT NULL
+                AND publish_at <= NOW()";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+    }
+}
+=======
+    private $conn;
+
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    public function getArticleAuthor($comment_id) {
+
+        $query = "SELECT articles.author_id
+                  FROM comments
+                  JOIN articles
+                  ON comments.article_id = articles.id
+                  WHERE comments.id = :comment_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':comment_id', $comment_id);
+
         $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row['author_id'];
     }
 }
 
+>>>>>>> 43e5fcb99a6573a906057cc3798c99421378d774
+?>
