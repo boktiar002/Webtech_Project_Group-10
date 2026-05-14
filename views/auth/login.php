@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Authentication Login Page -->
 <html>
 <head>
     <title>Login</title>
