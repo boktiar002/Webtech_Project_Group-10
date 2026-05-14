@@ -12,17 +12,16 @@ if(!isset($_SESSION['user_id'])){
 
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Profile Page</title>
-
+    <title>Profile</title>
 </head>
-
 <body>
 
-<h2>Update Profile</h2>
+<<h2>User Profile Management</h2>
 
+<p>
+Update your bio, social links and profile picture
+</p>
 <form
 
 action="../../controllers/ProfileController.php"
@@ -33,78 +32,46 @@ enctype="multipart/form-data"
 
 >
 
-<label>Bio</label>
-
-<br>
+<label>Bio</label><br>
 
 <textarea
-
 name="bio"
-
 rows="5"
-
 cols="40"
-
-placeholder="Write your bio"
-
 ></textarea>
 
 <br><br>
 
-<label>Twitter URL</label>
-
-<br>
+<label>Twitter URL</label><br>
 
 <input
-
 type="text"
-
 name="twitter"
-
-placeholder="https://twitter.com/username"
-
 >
 
 <br><br>
 
-<label>GitHub URL</label>
-
-<br>
+<label>GitHub URL</label><br>
 
 <input
-
 type="text"
-
 name="github"
-
-placeholder="https://github.com/username"
-
 >
 
 <br><br>
 
-<label>Profile Picture</label>
-
-<br>
+<label>Profile Picture</label><br>
 
 <input
-
 type="file"
-
-name="profile_pic"
-
-accept="image/*"
-
+name="avatar"
 >
 
 <br><br>
 
 <button
-
 type="submit"
-
-name="saveProfile"
-
+name="update_profile"
 >
 
 Update Profile
@@ -113,22 +80,5 @@ Update Profile
 
 </form>
 
-<br><br>
-
-<a href="../../public/index.php">
-
-Go Home
-
-</a>
-
-<br><br>
-
-<a href="../../public/logout.php">
-
-Logout
-
-</a>
-
 </body>
-
 </html>
