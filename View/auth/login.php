@@ -22,7 +22,7 @@ Enter your email and password to continue
 
 <form
 
-action="../../Controller/AuthController.php"
+action="/Webtech_Project_Group-10/Controller/AuthController.php"
 
 method="POST"
 

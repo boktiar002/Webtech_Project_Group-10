@@ -1,118 +1,110 @@
-<?php
-
-session_start();
-
-if(!isset($_SESSION['user_id'])){
-
-    die("Please Login First");
-
-}
-
-?>
-
 <!DOCTYPE html>
 
 <html>
 
 <head>
 
-    <title>Profile</title>
+    <title>Register</title>
 
 </head>
 
 <body>
 
-<h2>User Profile Management</h2>
-
-<p>
-
-Update your bio, social links and profile picture
-
-</p>
+<h2>Registration Form</h2>
 
 <form
 
-action="../../Controller/ProfileController.php"
+action="/Webtech_Project_Group-10/Controller/AuthController.php"
 
 method="POST"
 
-enctype="multipart/form-data"
-
 >
 
-<label>Bio</label><br>
+    <label>Name</label><br>
 
-<textarea
+    <input
 
-name="bio"
+        type="text"
 
-rows="5"
+        name="name"
 
-cols="40"
+        required
 
-></textarea>
+    >
 
-<br><br>
+    <br><br>
 
-<label>Twitter URL</label><br>
+    <label>Email</label><br>
 
-<input
+    <input
 
-type="text"
+        type="email"
 
-name="twitter"
+        name="email"
 
-placeholder="https://twitter.com/username"
+        required
 
->
+    >
 
-<br><br>
+    <br><br>
 
-<label>GitHub URL</label><br>
+    <label>Password</label><br>
 
-<input
+    <input
 
-type="text"
+        type="password"
 
-name="github"
+        name="password"
 
-placeholder="https://github.com/username"
+        minlength="8"
 
->
+        required
 
-<br><br>
+    >
 
-<label>Profile Picture</label><br>
+    <br><br>
 
-<input
+    <label>Select Role</label><br>
 
-type="file"
+    <input
 
-name="avatar"
+        type="radio"
 
-accept=".jpg,.jpeg,.png"
+        name="role"
 
->
+        value="reader"
 
-<p>
+        checked
 
-Accepted formats: JPG, JPEG, PNG
+    >
 
-</p>
+    Reader
 
-<br><br>
+    <input
 
-<button
+        type="radio"
 
-type="submit"
+        name="role"
 
-name="update_profile"
+        value="author"
 
->
+    >
 
-Update Profile
+    Author
 
-</button>
+    <br><br>
+
+    <button
+
+        type="submit"
+
+        name="register"
+
+    >
+
+        Register
+
+    </button>
 
 </form>
 
