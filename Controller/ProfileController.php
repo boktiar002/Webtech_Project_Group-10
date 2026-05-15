@@ -4,7 +4,7 @@ session_start();
 
 include("../config/database.php");
 
-if(isset($_POST['update_profile'])){
+if(isset($_POST['saveProfile'])){
 
     $bio = trim($_POST['bio']);
     $twitter = trim($_POST['twitter']);
@@ -21,77 +21,57 @@ if(isset($_POST['update_profile'])){
 
     $avatarPath = null;
 
-    // IMAGE UPLOAD
-
     if(
-        isset($_FILES['avatar'])
+        isset($_FILES['profile_pic'])
         &&
-        $_FILES['avatar']['error']==0
+        $_FILES['profile_pic']['error']==0
     ){
 
-        $file = $_FILES['avatar'];
+        $file=$_FILES['profile_pic'];
 
-        $allowed = [
+        $allowed=[
 
             "image/jpeg",
             "image/png"
 
         ];
 
-        // FILE TYPE CHECK
+        if(in_array(
+            $file['type'],
+            $allowed
+        )){
 
-        if(
-            in_array(
-                $file['type'],
-                $allowed
-            )
-        ){
+            if($file['size']<=1000000){
 
-            // FILE SIZE CHECK
-
-            if($file['size'] <= 1000000){
-
-                $ext = pathinfo(
-
+                $ext=pathinfo(
                     $file['name'],
-
                     PATHINFO_EXTENSION
-
                 );
 
-                $fileName =
-
+                $fileName=
                 time().".".$ext;
 
-                $folder =
-
+                $folder=
                 "../public/uploads/avatars/";
-
-                // CREATE FOLDER
 
                 if(!is_dir($folder)){
 
                     mkdir(
-
                         $folder,
                         0777,
                         true
-
                     );
 
                 }
 
-                // MOVE FILE
-
                 move_uploaded_file(
 
                     $file['tmp_name'],
-
                     $folder.$fileName
 
                 );
 
-                $avatarPath =
+                $avatarPath=
 
                 "public/uploads/avatars/"
                 .$fileName;
@@ -102,9 +82,7 @@ if(isset($_POST['update_profile'])){
 
     }
 
-    // UPDATE PROFILE
-
-    $query = "
+    $query="
 
     UPDATE users
 
@@ -118,8 +96,7 @@ if(isset($_POST['update_profile'])){
 
     ";
 
-    $stmt =
-
+    $stmt=
     $conn->prepare($query);
 
     $stmt->execute([
@@ -134,5 +111,4 @@ if(isset($_POST['update_profile'])){
     echo "Profile Updated";
 
 }
-
 ?>
