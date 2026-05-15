@@ -52,7 +52,7 @@ class ArticleController {
                 }
             }
 
-            header("Location: http://localhost/Webtech_Project_Group-10/View/article/dashboard.php");
+            header("Location: /Webtech_Project_Group-10/index.php?page=dashboard");
             exit();
         }
     }
@@ -60,7 +60,7 @@ class ArticleController {
     // DELETE
     public function delete($id){
         $this->article->delete($id);
-        header("Location: http://localhost/Webtech_Project_Group-10/View/article/dashboard.php");
+        header("Location: /Webtech_Project_Group-10/index.php?page=dashboard");
         exit();
     }
 
@@ -120,7 +120,7 @@ class ArticleController {
                 }
             }
 
-            header("Location: http://localhost/Webtech_Project_Group-10/View/article/dashboard.php");
+            header("Location: /Webtech_Project_Group-10/index.php?page=dashboard");
             exit();
         }
     }

@@ -2,8 +2,8 @@
 
 session_start();
 
-include("../Config/database.php");
-
+include("../Config/Database.php");
+$db = (new Database())->getConnection();
 
 // ==========================
 // REGISTRATION
@@ -14,7 +14,7 @@ if(isset($_POST['register'])){
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
-    $selectedRole = $_POST['role'];
+    $selectedRole = $_POST['role'] ?? 'reader';
 
     // Validation
 
@@ -43,17 +43,19 @@ if(isset($_POST['register'])){
     WHERE email=?";
 
     $stmt =
-    $conn->prepare(
+    $db->prepare(
         $checkQuery
     );
 
-    $stmt->execute([
-
+    $stmt->bind_param(
+        "s",
         $email
+    );
 
-    ]);
+    $stmt->execute();
+    $stmt->store_result();
 
-    if($stmt->rowCount()>0){
+    if($stmt->num_rows>0){
 
         die("Email already exists");
 
@@ -101,24 +103,30 @@ if(isset($_POST['register'])){
     VALUES(?,?,?,?,?)";
 
     $stmt =
-    $conn->prepare(
+    $db->prepare(
         $insertQuery
     );
 
-    $result =
-    $stmt->execute([
-
+    $stmt->bind_param(
+        "ssssi",
         $name,
         $email,
         $hashedPassword,
         $role,
         $pending
+    );
 
-    ]);
+    $result =
+    $stmt->execute();
 
     if($result){
 
-        echo "Registration Successful";
+        $_SESSION['user_id'] = $db->insert_id;
+        $_SESSION['name'] = $name;
+        $_SESSION['role'] = $role;
+
+        header("Location: ../index.php?page=dashboard");
+        exit();
 
     }else{
 
@@ -169,20 +177,22 @@ if(isset($_POST['login'])){
     WHERE email=?";
 
     $stmt =
-    $conn->prepare(
+    $db->prepare(
         $query
     );
 
-    $stmt->execute([
-
+    $stmt->bind_param(
+        "s",
         $email
+    );
 
-    ]);
+    $stmt->execute();
+
+    $result =
+    $stmt->get_result();
 
     $user =
-    $stmt->fetch(
-        PDO::FETCH_ASSOC
-    );
+    $result->fetch_assoc();
 
     if($user){
 
@@ -246,19 +256,19 @@ if(isset($_POST['login'])){
                 WHERE id=?";
 
                 $updateStmt =
-                $conn->prepare(
+                $db->prepare(
 
                     $updateQuery
 
                 );
 
-                $updateStmt->execute([
-
+                $updateStmt->bind_param(
+                    "si",
                     $hashedToken,
-
                     $user['id']
+                );
 
-                ]);
+                $updateStmt->execute();
 
                 setcookie(
 
@@ -282,7 +292,7 @@ if(isset($_POST['login'])){
 
             header(
 
-                "Location:../Public/index.php"
+                "Location: ../index.php?page=dashboard"
 
             );
 

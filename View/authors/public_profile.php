@@ -1,295 +1,103 @@
 <?php
 
-include("../../Config/database.php");
+require_once __DIR__ . '/../../Config/Database.php';
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../../data.json'), true);
 
-// ==========================
-// AUTHOR ID CHECK
-// ==========================
-
-if(!isset($_GET['id'])){
-
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Author ID Missing");
-
 }
 
-$authorId = $_GET['id'];
+$authorId = (int) $_GET['id'];
+$connection = (new Database())->getConnection();
 
+$query = "SELECT * FROM users WHERE id = ?";
+$stmt = $connection->prepare($query);
+$stmt->bind_param("i", $authorId);
+$stmt->execute();
+$author = $stmt->get_result()->fetch_assoc();
 
-// ==========================
-// AUTHOR QUERY
-// ==========================
-
-$query = "
-
-SELECT *
-FROM users
-WHERE id=?
-
-";
-
-$stmt = $conn->prepare($query);
-
-$stmt->execute([
-
-    $authorId
-
-]);
-
-$author = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if(!$author){
-
+if (!$author) {
     die("Author Not Found");
-
 }
-
-
-// ==========================
-// SOCIAL LINKS
-// ==========================
 
 $socialLinks = [];
-
-if(!empty($author['social_links'])){
-
-    $socialLinks = json_decode(
-
-        $author['social_links'],
-
-        true
-
-    );
-
+if (!empty($author['social_links'])) {
+    $socialLinks = json_decode($author['social_links'], true) ?: [];
 }
-
-
-// ==========================
-// PUBLISHED ARTICLES
-// ==========================
 
 $articles = [];
-
-try{
-
-    $articleQuery = "
-
-    SELECT *
+$articleQuery = "SELECT id, title
     FROM articles
-    WHERE author_id=?
-    AND status='published'
-    ORDER BY created_at DESC
+    WHERE author_id = ?
+      AND status = 'published'
+    ORDER BY created_at DESC";
+$articleStmt = $connection->prepare($articleQuery);
+$articleStmt->bind_param("i", $authorId);
+$articleStmt->execute();
+$articleResult = $articleStmt->get_result();
 
-    ";
-
-    $articleStmt =
-
-    $conn->prepare(
-
-        $articleQuery
-
-    );
-
-    $articleStmt->execute([
-
-        $authorId
-
-    ]);
-
-    $articles =
-
-    $articleStmt->fetchAll(
-
-        PDO::FETCH_ASSOC
-
-    );
-
-}catch(Exception $e){
-
-    $articles = [];
-
+while ($article = $articleResult->fetch_assoc()) {
+    $articles[] = $article;
 }
 
-
-// ==========================
-// PROFILE IMAGE PATH
-// ==========================
-
-if(
-
-    !empty($author['profile_pic_path'])
-
-){
-
-    $image =
-
-    "/Webtech_Project_Group-10/" .
-
-    $author['profile_pic_path'];
-
-}else{
-
-    $image =
-
-    "/Webtech_Project_Group-10/Public/uploads/avatars/default.png";
-
+if (!empty($author['profile_pic_path'])) {
+    $image = "/Webtech_Project_Group-10/" . ltrim($author['profile_pic_path'], '/');
+} else {
+    $image = "https://placehold.co/150x150";
 }
 
+include __DIR__ . '/../Layouts/header.php';
 ?>
-
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-    <title>Author Profile</title>
-
-</head>
-
-<body>
 
 <h2>Author Profile</h2>
 
-
 <img
-
-src="<?php echo $image; ?>"
-
+src="<?php echo htmlspecialchars($image); ?>"
 width="150"
-
 height="150"
-
 alt="Profile Image"
-
 >
 
 <br><br>
 
-
-<h3>
-
-<?php
-
-echo $author['name'];
-
-?>
-
-</h3>
-
+<h3><?php echo htmlspecialchars($author['name']); ?></h3>
 
 <h3>Bio</h3>
-
-<p>
-
-<?php
-
-echo $author['bio']
-
-?? "No bio added";
-
-?>
-
-</p>
-
+<p><?php echo htmlspecialchars($author['bio'] ?? "No bio added"); ?></p>
 
 <h3>Social Links</h3>
 
-
 <p>
-
 Twitter:
-
-<a
-
-href="<?php echo $socialLinks['twitter'] ?? '#'; ?>"
-
-target="_blank"
-
->
-
-<?php
-
-echo $socialLinks['twitter']
-
-?? "No Twitter";
-
-?>
-
+<a href="<?php echo htmlspecialchars($socialLinks['twitter'] ?? '#'); ?>" target="_blank">
+<?php echo htmlspecialchars($socialLinks['twitter'] ?? "No Twitter"); ?>
 </a>
-
 </p>
-
 
 <p>
-
 GitHub:
-
-<a
-
-href="<?php echo $socialLinks['github'] ?? '#'; ?>"
-
-target="_blank"
-
->
-
-<?php
-
-echo $socialLinks['github']
-
-?? "No GitHub";
-
-?>
-
+<a href="<?php echo htmlspecialchars($socialLinks['github'] ?? '#'); ?>" target="_blank">
+<?php echo htmlspecialchars($socialLinks['github'] ?? "No GitHub"); ?>
 </a>
-
 </p>
-
 
 <h3>Published Articles</h3>
 
-
-<?php
-
-if(!empty($articles)){
-
-    foreach($articles as $article){
-
-?>
-
-<p>
-
-
-
-<?php
-
-echo $article['title'];
-
-?>
-
-</p>
-
-<?php
-
-    }
-
-}else{
-
-    echo "No published articles found";
-
-}
-
-?>
-
+<?php if (!empty($articles)) { ?>
+    <?php foreach ($articles as $article) { ?>
+        <p>
+            <a href="/Webtech_Project_Group-10/index.php?page=article&id=<?php echo $article['id']; ?>">
+                <?php echo htmlspecialchars($article['title']); ?>
+            </a>
+        </p>
+    <?php } ?>
+<?php } else { ?>
+    <p>No published articles found</p>
+<?php } ?>
 
 <br><br>
 
-<a href="../../Public/index.php">
+<a href="/Webtech_Project_Group-10/index.php">Home</a>
 
-Home
-
-</a>
-
-</body>
-
-</html>
+<?php include __DIR__ . '/../Layouts/footer.php'; ?>

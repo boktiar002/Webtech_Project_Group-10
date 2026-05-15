@@ -14,7 +14,7 @@ class CategoryController {
 
     public function store($name){
         $this->category->create($name);
-        header("Location: http://localhost/Webtech_Project_Group-10/View/category/index.php");
+        header("Location: /Webtech_Project_Group-10/index.php?page=categories");
         exit();
     }
 
