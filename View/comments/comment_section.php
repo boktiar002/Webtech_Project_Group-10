@@ -9,6 +9,8 @@
         <div id="comment-message" style="margin-top: 10px;"></div>
     </div>
 
+
+    
     <hr>
 
     <div id="comments-container">
