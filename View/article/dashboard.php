@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . "/../../Controller/ArticleController.php";
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
+include __DIR__ . "/../Layouts/header.php";
+
 $controller = new ArticleController();
 
 if (isset($_GET['delete'])) {
@@ -165,8 +168,8 @@ $result = $controller->index();
     <div class="dashboard-topbar">
         <h2>Article Dashboard</h2>
         <div class="dashboard-actions">
-            <a class="dashboard-link primary" href="/Webtech_Project_Group-10/View/article/create.php">New Article</a>
-            <a class="dashboard-link" href="/Webtech_Project_Group-10/View/category/index.php">Manage Categories & Tags</a>
+            <a class="dashboard-link primary" href="/Webtech_Project_Group-10/index.php?page=article_form">New Article</a>
+            <a class="dashboard-link" href="/Webtech_Project_Group-10/index.php?page=categories">Manage Categories & Tags</a>
         </div>
     </div>
 
@@ -223,3 +226,4 @@ function toggleStatus(id, btn) {
     });
 }
 </script>
+<?php include __DIR__ . "/../Layouts/footer.php"; ?>

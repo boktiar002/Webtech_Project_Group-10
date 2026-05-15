@@ -1,43 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
+<?php
+$config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
+include __DIR__ . "/../Layouts/header.php";
+?>
 
-<h2>Registration Form</h2>
+<style>
+    .auth-page {
+        max-width: 560px;
+        margin: 36px auto 48px;
+        padding: 0 18px;
+    }
 
-<form action="/Webtech_Project_Group-10/Controller/AuthController.php" method="POST">
+    .auth-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 22px;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.07);
+        padding: 28px;
+    }
 
-    <label>Name</label><br>
-    <input type="text" name="name"><br><br>
+    .auth-card h2 {
+        margin: 0 0 18px;
+    }
 
-    <label>Email</label><br>
-    <input type="email" name="email"><br><br>
+    .auth-card label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
 
-    <label>Password</label><br>
-    <input
-type="password"
-name="password"
-minlength="8"
-required
-><br><br>
+    .auth-card input[type="text"],
+    .auth-card input[type="email"],
+    .auth-card input[type="password"] {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #cbd5e1;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+    }
 
-    <label>Select Role</label><br>
+    .role-row {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
 
-    <input type="radio" name="role" value="reader" checked>
-    Reader
+    .role-row label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        margin: 0;
+    }
 
-    <input type="radio" name="role" value="author">
-    Author
+    .auth-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #0f766e;
+        color: #fff;
+    }
+</style>
 
-    <br><br>
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>Registration Form</h2>
 
-    <button type="submit" name="register">
-        Register
-    </button>
+        <form action="/Webtech_Project_Group-10/Controller/AuthController.php" method="POST">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name">
 
-</form>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
 
-</body>
-</html>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" minlength="8" required>
+
+            <label>Select Role</label>
+            <div class="role-row">
+                <label><input type="radio" name="role" value="reader" checked> Reader</label>
+                <label><input type="radio" name="role" value="author"> Author</label>
+            </div>
+
+            <button class="auth-btn" type="submit" name="register">Register</button>
+        </form>
+    </div>
+</div>
+
+<?php include __DIR__ . "/../Layouts/footer.php"; ?>

@@ -4,6 +4,8 @@ session_start();
 
 require_once __DIR__ . '/../../Config/Database.php';
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../../data.json'), true);
+
 if (!isset($_SESSION['user_id'])) {
     die("Login First");
 }
@@ -20,14 +22,8 @@ while ($user = $result->fetch_assoc()) {
     $users[] = $user;
 }
 
+include __DIR__ . '/../Layouts/header.php';
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>All Users</title>
-</head>
-<body>
 
 <h1>All Users</h1>
 
@@ -87,5 +83,4 @@ alert("Error");
 }
 </script>
 
-</body>
-</html>
+<?php include __DIR__ . '/../Layouts/footer.php'; ?>

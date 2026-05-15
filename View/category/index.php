@@ -2,6 +2,9 @@
 require_once __DIR__ . "/../../Controller/CategoryController.php";
 require_once __DIR__ . "/../../Controller/TagController.php";
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
+include __DIR__ . "/../Layouts/header.php";
+
 $categoryController = new CategoryController();
 $tagController = new TagController();
 
@@ -43,11 +46,7 @@ $categories = $categoryController->index();
 $tags = $tagController->index();
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Category & Tag Management</title>
-    <style>
+<style>
         body {
             font-family: Arial, sans-serif;
             background: #f8fafc;
@@ -61,6 +60,25 @@ $tags = $tagController->index();
             margin: 0 auto;
         }
 
+        .hero {
+            background: linear-gradient(135deg, #0f766e, #1d4ed8);
+            color: #fff;
+            border-radius: 24px;
+            padding: 26px 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        .hero h2 {
+            margin: 0 0 6px;
+            font-size: 2rem;
+        }
+
+        .hero p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -72,11 +90,12 @@ $tags = $tagController->index();
 
         .back-link {
             text-decoration: none;
-            background: #e2e8f0;
-            color: #0f172a;
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
             padding: 10px 16px;
             border-radius: 999px;
             font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .panel-grid {
@@ -124,6 +143,12 @@ $tags = $tagController->index();
             color: #fff;
             font-weight: 700;
             cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
         }
 
         .item-list {
@@ -151,18 +176,28 @@ $tags = $tagController->index();
             color: #dc2626;
             font-weight: 700;
         }
+
+        .section-caption {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #64748b;
+        }
     </style>
-</head>
-<body>
     <div class="wrap">
-        <div class="topbar">
-            <h2>Category & Tag Management</h2>
-            <a class="back-link" href="/Webtech_Project_Group-10/index.php?page=dashboard">Back to Dashboard</a>
+        <div class="hero">
+            <div class="topbar">
+                <div>
+                    <h2>Category & Tag Management</h2>
+                    <p>Organize articles, keep tags tidy, and manage publishing structure in one place.</p>
+                </div>
+                <a class="back-link" href="/Webtech_Project_Group-10/index.php?page=dashboard">Back to Dashboard</a>
+            </div>
         </div>
 
         <div class="panel-grid">
             <section class="panel">
                 <h3>Categories</h3>
+                <p class="section-caption">Use categories to group articles into broad sections.</p>
 
                 <?php if (isset($cat_error)): ?>
                     <p class="error"><?php echo htmlspecialchars($cat_error); ?></p>
@@ -188,6 +223,7 @@ $tags = $tagController->index();
 
             <section class="panel">
                 <h3>Tags</h3>
+                <p class="section-caption">Use tags for smaller topics and better article discovery.</p>
 
                 <?php if (isset($tag_error)): ?>
                     <p class="error"><?php echo htmlspecialchars($tag_error); ?></p>
@@ -212,5 +248,4 @@ $tags = $tagController->index();
             </section>
         </div>
     </div>
-</body>
-</html>
+<?php include __DIR__ . "/../Layouts/footer.php"; ?>

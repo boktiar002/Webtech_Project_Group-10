@@ -1,7 +1,5 @@
 <div class="card">
-    <img src="<?= $article['featured_image_path']
-        ? 'public/uploads/articles/' . htmlspecialchars($article['featured_image_path'])
-        : 'https://placehold.co/400x180' ?>" alt="">
+    <img src="<?= !empty($article['featured_image_path']) ? htmlspecialchars($article['featured_image_path']) : 'https://placehold.co/400x180' ?>" alt="">
     <div class="card-body">
         <h3>
             <a href="index.php?page=article&id=<?= $article['id'] ?>">

@@ -2,6 +2,9 @@
 require_once __DIR__ . "/../../Controller/ArticleController.php";
 require_once __DIR__ . "/../../Controller/CategoryController.php";
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
+include __DIR__ . "/../Layouts/header.php";
+
 $controller = new ArticleController();
 $categoryController = new CategoryController();
 
@@ -34,6 +37,31 @@ $categories = $categoryController->index();
         margin-top: 0;
         margin-bottom: 8px;
         font-size: 2rem;
+    }
+
+    .article-form-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .article-form-topbar h2 {
+        margin: 0;
+    }
+
+    .back-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background: #e2e8f0;
+        color: #0f172a;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
     }
 
     .article-form-card p {
@@ -129,7 +157,10 @@ $categories = $categoryController->index();
 
 <div class="article-form-page">
     <div class="article-form-card">
-        <h2>Create Article</h2>
+        <div class="article-form-topbar">
+            <h2>Create Article</h2>
+            <a class="back-pill" href="/Webtech_Project_Group-10/index.php?page=dashboard">Back to Dashboard</a>
+        </div>
         <p>Write, organize, and publish your next post from one clean form.</p>
 
         <?php foreach ($errors as $e): ?>
@@ -187,3 +218,4 @@ $categories = $categoryController->index();
         </form>
     </div>
 </div>
+<?php include __DIR__ . "/../Layouts/footer.php"; ?>

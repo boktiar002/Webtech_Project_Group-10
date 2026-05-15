@@ -1,6 +1,8 @@
 <?php 
 if(session_status() === PHP_SESSION_NONE) 
-session_start(); 
+    session_start(); 
+
+$appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'));
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +110,7 @@ session_start();
 <body>
 
 <nav>
-    <a href="/Webtech_Project_Group-10/index.php" class="logo">
+    <a href="<?= $appRoot ?>/index.php" class="logo">
         📰 <?= $config['site_name'] ?>
     </a>
 
@@ -120,15 +122,16 @@ session_start();
     </div>
 
     <div class="nav-links">
-        <a href="/Webtech_Project_Group-10/index.php">Home</a>
+        <a href="<?= $appRoot ?>/index.php">Home</a>
         <?php if(isset($_SESSION['user_id'])): ?>
-            <a href="#"><?= htmlspecialchars($_SESSION['name']) ?></a>
-            <a href="/Webtech_Project_Group-10/index.php?page=logout">Logout</a>
+            <a href="<?= $appRoot ?>/index.php?page=author&id=<?= urlencode($_SESSION['user_id']) ?>"><?= htmlspecialchars($_SESSION['name']) ?></a>
+            <a href="<?= $appRoot ?>/index.php?page=logout">Logout</a>
         <?php else: ?>
-            <a href="/Webtech_Project_Group-10/index.php?page=login">Login</a>
-            <a href="/Webtech_Project_Group-10/index.php?page=register">Register</a>
+            <a href="<?= $appRoot ?>/index.php?page=login">Login</a>
+            <a href="<?= $appRoot ?>/index.php?page=register">Register</a>
         <?php endif; ?>
     </div>
 </nav>
 
-<script src="Controller/JS/ajax.js"></script>
+<script>const APP_ROOT = '<?= $appRoot ?>';</script>
+<script src="<?= $appRoot ?>/Controller/JS/ajax.js"></script>

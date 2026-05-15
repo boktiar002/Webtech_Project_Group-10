@@ -189,8 +189,6 @@
             </div>
 
             <div class="article-actions">
-                <a class="article-button" href="/Webtech_Project_Group-10/index.php">Reader Home</a>
-
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <button id="like-btn" class="article-button" onclick="toggleLike(<?php echo $article['id']; ?>)">
                         Like <span id="like-count"><?php echo (int) $article['like_count']; ?></span>

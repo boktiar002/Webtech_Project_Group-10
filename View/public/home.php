@@ -65,8 +65,8 @@ function filterCategory(btn, categoryId) {
     btn.classList.add('active');
 
     const url = categoryId
-        ? `Api/articles.php?category_id=${categoryId}`
-        : `Api/articles.php`;
+        ? `${APP_ROOT}/Api/articles.php?category_id=${categoryId}`
+        : `${APP_ROOT}/Api/articles.php`;
 
     fetch(url)
         .then(res => res.json())
@@ -78,7 +78,7 @@ function filterCategory(btn, categoryId) {
             }
             grid.innerHTML = articles.map(a => `
                 <div class="card">
-                    <img src="${a.featured_image_path ? 'public/uploads/articles/' + a.featured_image_path : 'https://placehold.co/400x180'}" alt="">
+                    <img src="${a.featured_image_path ? a.featured_image_path : 'https://placehold.co/400x180'}" alt="">
                     <div class="card-body">
                         <h3><a href="index.php?page=article&id=${a.id}">${a.title}</a></h3>
                         <div class="card-meta">

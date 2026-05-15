@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../../Config/Database.php';
 
+$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../../data.json'), true);
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Author ID Missing");
 }
@@ -45,14 +47,8 @@ if (!empty($author['profile_pic_path'])) {
     $image = "https://placehold.co/150x150";
 }
 
+include __DIR__ . '/../Layouts/header.php';
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Author Profile</title>
-</head>
-<body>
 
 <h2>Author Profile</h2>
 
@@ -104,5 +100,4 @@ GitHub:
 
 <a href="/Webtech_Project_Group-10/index.php">Home</a>
 
-</body>
-</html>
+<?php include __DIR__ . '/../Layouts/footer.php'; ?>
