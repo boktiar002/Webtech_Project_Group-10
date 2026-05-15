@@ -1,6 +1,6 @@
 <?php
 
-include("../../config/database.php");
+include("../../Config/database.php");
 
 // URL থেকে Author ID
 
@@ -107,7 +107,7 @@ $image =
 
 :
 
-"../../public/uploads/avatars/default.png";
+"../../Public/uploads/avatars/default.png";
 
 ?>
 
@@ -266,7 +266,7 @@ echo
 
 <br><br>
 
-<a href="../../public/index.php">
+<a href="../../Public/index.php">
 
 Home
 

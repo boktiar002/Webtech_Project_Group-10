@@ -2,7 +2,7 @@
 
 session_start();
 
-include("../config/database.php");
+include("../Config/database.php");
 
 if(isset($_POST['saveProfile'])){
 
@@ -52,7 +52,7 @@ if(isset($_POST['saveProfile'])){
                 time().".".$ext;
 
                 $folder=
-                "../public/uploads/avatars/";
+                "../Public/uploads/avatars/";
 
                 if(!is_dir($folder)){
 
