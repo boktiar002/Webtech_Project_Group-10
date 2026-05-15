@@ -47,6 +47,7 @@ cols="40"
 <input
 type="text"
 name="twitter"
+placeholder="https://twitter.com/username"
 >
 
 <br><br>
@@ -56,6 +57,7 @@ name="twitter"
 <input
 type="text"
 name="github"
+placeholder="https://github.com/username"
 >
 
 <br><br>
@@ -67,7 +69,9 @@ type="file"
 name="avatar"
 accept=".jpg,.jpeg,.png"
 >
-
+<p>
+Accepted formats: JPG, JPEG, PNG
+</p>
 <br><br>
 
 <button
