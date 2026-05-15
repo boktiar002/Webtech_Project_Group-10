@@ -1,5 +1,0 @@
-<?php
-
-// Authentication middleware placeholder
-
-?>
