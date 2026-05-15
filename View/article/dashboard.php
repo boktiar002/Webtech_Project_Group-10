@@ -57,19 +57,25 @@ $result = $controller->index();
 </table>
 
 <script>
+
 function toggleStatus(id, btn){
+
     fetch('../../api/toggle_article.php', {
+        
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id})
     })
     .then(r => r.json())
     .then(data => {
+
+    
         const badge = document.getElementById('badge-' + id);
         badge.textContent = data.status;
         badge.style.background = data.status === 'published' ? 'green' : 'gray';
         btn.textContent = data.status === 'published' ? 'Unpublish' : 'Publish';
         btn.dataset.status = data.status;
+        
     });
 }
 </script>
