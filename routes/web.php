@@ -1,0 +1,5 @@
+<?php
+
+// Web routes placeholder
+
+?>

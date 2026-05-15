@@ -1,5 +1,5 @@
 <?php
 
-// Admin related logic will be handled here
+// Admin controller placeholder
 
 ?>
