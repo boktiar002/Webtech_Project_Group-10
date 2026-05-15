@@ -2,103 +2,79 @@
 
 session_start();
 
-include("../config/database.php");
+include("../Config/database.php");
 
-if(isset($_POST['saveProfile'])){
+if(!isset($_SESSION['user_id'])){
+
+    die("Please Login First");
+
+}
+
+if(isset($_POST['update_profile'])){
 
     $bio = trim($_POST['bio']);
+
     $twitter = trim($_POST['twitter']);
+
     $github = trim($_POST['github']);
 
     $userId = $_SESSION['user_id'];
 
+    // SOCIAL LINKS JSON
+
     $socialLinks = json_encode([
 
-        "twitter"=>$twitter,
-        "github"=>$github
+        "twitter" => $twitter,
+
+        "github" => $github
 
     ]);
 
-    $avatarPath = null;
+    $avatarPath = "";
 
-    if(
-        isset($_FILES['profile_pic'])
-        &&
-        $_FILES['profile_pic']['error']==0
-    ){
+    // IMAGE UPLOAD
 
-        $file=$_FILES['profile_pic'];
+    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0){
 
-        $allowed=[
+        $fileName =
+            time() . "_" .
+            $_FILES['avatar']['name'];
 
-            "image/jpeg",
-            "image/png"
+        $tmpName =
+            $_FILES['avatar']['tmp_name'];
 
-        ];
+        $uploadPath =
+            "../Public/uploads/avatars/" .
+            $fileName;
 
-        if(in_array(
-            $file['type'],
-            $allowed
-        )){
+        move_uploaded_file(
 
-            if($file['size']<=1000000){
+            $tmpName,
 
-                $ext=pathinfo(
-                    $file['name'],
-                    PATHINFO_EXTENSION
-                );
+            $uploadPath
 
-                $fileName=
-                time().".".$ext;
+        );
 
-                $folder=
-                "../public/uploads/avatars/";
-
-                if(!is_dir($folder)){
-
-                    mkdir(
-                        $folder,
-                        0777,
-                        true
-                    );
-
-                }
-
-                move_uploaded_file(
-
-                    $file['tmp_name'],
-                    $folder.$fileName
-
-                );
-
-                $avatarPath=
-
-                "public/uploads/avatars/"
-                .$fileName;
-
-            }
-
-        }
+        $avatarPath =
+            "Public/uploads/avatars/" .
+            $fileName;
 
     }
 
-    $query="
+    // UPDATE QUERY
 
-    UPDATE users
-
+    $query =
+    "UPDATE users
     SET
-
     bio=?,
     social_links=?,
     profile_pic_path=?
+    WHERE id=?";
 
-    WHERE id=?
-
-    ";
-
-    $stmt=
+    $stmt =
     $conn->prepare($query);
 
+    $result =
     $stmt->execute([
 
         $bio,
@@ -108,7 +84,16 @@ if(isset($_POST['saveProfile'])){
 
     ]);
 
-    echo "Profile Updated";
+    if($result){
+
+        echo "Profile Updated Successfully";
+
+    }else{
+
+        echo "Profile Update Failed";
+
+    }
 
 }
+
 ?>
