@@ -17,7 +17,7 @@ if(!isset($_SESSION['user_id'])){
 </head>
 <body>
 
-<<h2>User Profile Management</h2>
+<h2>User Profile Management</h2>
 
 <p>
 Update your bio, social links and profile picture
@@ -65,6 +65,7 @@ name="github"
 <input
 type="file"
 name="avatar"
+accept=".jpg,.jpeg,.png"
 >
 
 <br><br>
