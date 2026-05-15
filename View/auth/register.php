@@ -7,7 +7,7 @@
 
 <h2>Registration Form</h2>
 
-<form action="../../Controller/AuthController.php" method="POST">
+<form action="/Webtech_Project_Group-10/Controller/AuthController.php" method="POST">
 
     <label>Name</label><br>
     <input type="text" name="name"><br><br>

@@ -2,151 +2,89 @@
 
 session_start();
 
-include("../../Config/database.php");
+require_once __DIR__ . '/../../Config/Database.php';
 
-if(!isset($_SESSION['user_id'])){
-
+if (!isset($_SESSION['user_id'])) {
     die("Login First");
-
 }
 
-if($_SESSION['role']!="admin"){
-
+if ($_SESSION['role'] != "admin") {
     die("Admin Only");
-
 }
 
-$query="SELECT * FROM users";
+$connection = (new Database())->getConnection();
+$result = $connection->query("SELECT * FROM users ORDER BY id ASC");
+$users = [];
 
-$stmt=$conn->prepare($query);
-
-$stmt->execute();
-
-$users=$stmt->fetchAll(PDO::FETCH_ASSOC);
+while ($user = $result->fetch_assoc()) {
+    $users[] = $user;
+}
 
 ?>
 
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <title>All Users</title>
-
 </head>
-
 <body>
 
 <h1>All Users</h1>
 
 <table border="1" cellpadding="10">
-
 <tr>
-
 <th>ID</th>
 <th>Name</th>
 <th>Email</th>
 <th>Role</th>
 <th>Pending</th>
 <th>Action</th>
-
 </tr>
 
-<?php foreach($users as $user){ ?>
-
+<?php foreach ($users as $user) { ?>
 <tr>
-
 <td><?php echo $user['id']; ?></td>
-
-<td><?php echo $user['name']; ?></td>
-
-<td><?php echo $user['email']; ?></td>
-
+<td><?php echo htmlspecialchars($user['name']); ?></td>
+<td><?php echo htmlspecialchars($user['email']); ?></td>
 <td id="role<?php echo $user['id']; ?>">
-<?php echo $user['role']; ?>
+<?php echo htmlspecialchars($user['role']); ?>
 </td>
-
 <td>
 <?php echo $user['pending_author']; ?>
 </td>
-
 <td>
-
-<?php
-
-if(
-
-$user['pending_author']==1
-
-&&
-
-$user['role']=="reader"
-
-){
-
-?>
-
-<button
-
-onclick="promoteUser(
-
-<?php echo $user['id']; ?>
-
-)"
-
->
-
+<?php if ($user['pending_author'] == 1 && $user['role'] == "reader") { ?>
+<button onclick="promoteUser(<?php echo $user['id']; ?>)">
 Promote To Author
-
 </button>
-
 <?php } ?>
-
 </td>
-
 </tr>
-
 <?php } ?>
 
 </table>
 
 <script>
-
 function promoteUser(userId){
-
-fetch("../../api/users/promote.php",{
-
+fetch("/Webtech_Project_Group-10/Api/users/promote.php",{
 method:"POST",
-
 headers:{
 "Content-Type":"application/x-www-form-urlencoded"
 },
-
-body:"user_id="+userId
-
+body:"user_id="+encodeURIComponent(userId)
 })
-
-.then(response=>response.text())
+.then(response=>response.json())
 .then(data=>{
-
-console.log(data);
-
-alert("Done");
-
+alert(data.message || "Done");
+if(data.status==="success"){
 location.reload();
-
-})
-
-.catch(error=>{
-
-console.log(error);
-
-alert("Error");
-
-});
-
 }
-
+})
+.catch(error=>{
+console.log(error);
+alert("Error");
+});
+}
 </script>
 
 </body>

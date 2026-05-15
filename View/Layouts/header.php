@@ -8,7 +8,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $config['site_name'] ?></title>
+    <title><?= htmlspecialchars($config['site_name'] ?? 'BlogNews Platform') ?></title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
@@ -108,7 +108,7 @@ session_start();
 <body>
 
 <nav>
-    <a href="index.php" class="logo">
+    <a href="/Webtech_Project_Group-10/index.php" class="logo">
         📰 <?= $config['site_name'] ?>
     </a>
 
@@ -120,15 +120,15 @@ session_start();
     </div>
 
     <div class="nav-links">
-        <a href="index.php">Home</a>
+        <a href="/Webtech_Project_Group-10/index.php">Home</a>
         <?php if(isset($_SESSION['user_id'])): ?>
             <a href="#"><?= htmlspecialchars($_SESSION['name']) ?></a>
-            <a href="logout.php">Logout</a>
+            <a href="/Webtech_Project_Group-10/index.php?page=logout">Logout</a>
         <?php else: ?>
-            <a href="login.php">Login</a>
-            <a href="register.php">Register</a>
+            <a href="/Webtech_Project_Group-10/index.php?page=login">Login</a>
+            <a href="/Webtech_Project_Group-10/index.php?page=register">Register</a>
         <?php endif; ?>
     </div>
 </nav>
 
-<script src="../Controller/JS/ajax.js"></script>
+<script src="Controller/JS/ajax.js"></script>

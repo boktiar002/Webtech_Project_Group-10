@@ -1,58 +1,61 @@
 <?php
-include "../Models/Database.php";
-session_start();
+require_once __DIR__ . '/../Config/Database.php';
+require_once __DIR__ . '/../Controller/CommentController.php';
 
-// read site config from data.json
-$json_data = file_get_contents("../data.json");
-$config = json_decode($json_data, true);
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: ../Controller/home.php");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../data.json'), true);
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    header("Location: index.php");
     exit;
 }
 
 $id = (int)$_GET['id'];
 $database = new Database();
-$connection = $database->connection();
+$connection = $database->getConnection();
 
-// get article
-$sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
+$statement = $connection->prepare("SELECT a.*, u.name AS author_name, u.profile_pic_path,
         c.name AS category_name,
         (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
-        FROM articles a
-        LEFT JOIN users u ON a.author_id = u.id
-        LEFT JOIN categories c ON a.category_id = c.id
-        WHERE a.id = ? AND a.status = 'published'";
-$statement = $connection->prepare($sql);
+    FROM articles a
+    LEFT JOIN users u ON a.author_id = u.id
+    LEFT JOIN categories c ON a.category_id = c.id
+    WHERE a.id = ? AND a.status = 'published'");
 $statement->bind_param("i", $id);
 $statement->execute();
-$result = $statement->get_result();
-$article = $result->fetch_assoc();
+$article = $statement->get_result()->fetch_assoc();
 
 if (!$article) {
-    echo "Article not found.";
+    include __DIR__ . '/../View/Layouts/header.php';
+    echo "<div class=\"container\"><p>Article not found.</p></div>";
+    include __DIR__ . '/../View/Layouts/footer.php';
     exit;
 }
 
-// increment view count
-$view_sql = "UPDATE articles SET view_count = view_count + 1 WHERE id = ?";
-$view_stmt = $connection->prepare($view_sql);
-$view_stmt->bind_param("i", $id);
-$view_stmt->execute();
+$viewStatement = $connection->prepare("UPDATE articles SET view_count = view_count + 1 WHERE id = ?");
+$viewStatement->bind_param("i", $id);
+$viewStatement->execute();
 
-// get tags
-$tag_sql = "SELECT t.name FROM tags t
-            JOIN article_tags art ON t.id = art.tag_id
-            WHERE art.article_id = ?";
-$tag_stmt = $connection->prepare($tag_sql);
-$tag_stmt->bind_param("i", $id);
-$tag_stmt->execute();
-$tag_result = $tag_stmt->get_result();
+$tagStatement = $connection->prepare("SELECT t.name FROM tags t
+    JOIN article_tags art ON t.id = art.tag_id
+    WHERE art.article_id = ?");
+$tagStatement->bind_param("i", $id);
+$tagStatement->execute();
+$tagResult = $tagStatement->get_result();
 $tags = [];
-while ($row = $tag_result->fetch_assoc()) {
-    $tags[] = $row['name'];
+while ($tag = $tagResult->fetch_assoc()) {
+    $tags[] = $tag['name'];
 }
 
-include "../View/Layouts/header.php";
-include "../View/Public/article.php";
-include "../View/Layouts/footer.php";
+$commentController = new CommentController($connection);
+$article_id = $id;
+$commentsResponse = $commentController->getArticleComments($article_id);
+$comments = $commentsResponse['success'] ? $commentsResponse['data'] : [];
+
+include __DIR__ . '/../View/Layouts/header.php';
+include __DIR__ . '/../View/public/article.php';
+include __DIR__ . '/../View/Layouts/footer.php';
 ?>
