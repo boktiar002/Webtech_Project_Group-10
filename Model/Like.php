@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/../Config/Database.php';
 
 class Like {
     private $connection;
 
     function __construct() {
-        $db = new db();
-        $this->connection = $db->connection();
+        $db = new Database();
+        $this->connection = $db->getConnection();
     }
 
     // check if user already liked
