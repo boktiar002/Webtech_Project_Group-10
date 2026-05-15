@@ -1,110 +1,99 @@
+<?php
+
+session_start();
+
+if(!isset($_SESSION['user_id'])){
+
+    die("Please Login First");
+
+}
+
+?>
+
 <!DOCTYPE html>
 
 <html>
 
 <head>
 
-    <title>Register</title>
+    <title>Profile</title>
 
 </head>
 
 <body>
 
-<h2>Registration Form</h2>
+<h2>User Profile Management</h2>
+
+<p>
+
+Update your bio, social links and profile picture
+
+</p>
 
 <form
 
-action="/Webtech_Project_Group-10/Controller/AuthController.php"
+action="../../Controller/ProfileController.php"
 
 method="POST"
 
+enctype="multipart/form-data"
+
 >
 
-    <label>Name</label><br>
+<label>Bio</label><br>
 
-    <input
+<textarea
+name="bio"
+rows="5"
+cols="40"
+></textarea>
 
-        type="text"
+<br><br>
 
-        name="name"
+<label>Twitter URL</label><br>
 
-        required
+<input
+type="text"
+name="twitter"
+placeholder="https://twitter.com/username"
+>
 
-    >
+<br><br>
 
-    <br><br>
+<label>GitHub URL</label><br>
 
-    <label>Email</label><br>
+<input
+type="text"
+name="github"
+placeholder="https://github.com/username"
+>
 
-    <input
+<br><br>
 
-        type="email"
+<label>Profile Picture</label><br>
 
-        name="email"
+<input
+type="file"
+name="avatar"
+accept=".jpg,.jpeg,.png"
+>
 
-        required
+<p>
 
-    >
+Accepted formats: JPG, JPEG, PNG
 
-    <br><br>
+</p>
 
-    <label>Password</label><br>
+<br><br>
 
-    <input
+<button
+type="submit"
+name="update_profile"
+>
 
-        type="password"
+Update Profile
 
-        name="password"
-
-        minlength="8"
-
-        required
-
-    >
-
-    <br><br>
-
-    <label>Select Role</label><br>
-
-    <input
-
-        type="radio"
-
-        name="role"
-
-        value="reader"
-
-        checked
-
-    >
-
-    Reader
-
-    <input
-
-        type="radio"
-
-        name="role"
-
-        value="author"
-
-    >
-
-    Author
-
-    <br><br>
-
-    <button
-
-        type="submit"
-
-        name="register"
-
-    >
-
-        Register
-
-    </button>
+</button>
 
 </form>
 

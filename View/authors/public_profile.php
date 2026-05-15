@@ -149,11 +149,16 @@ echo $author['name'];
 
 </h3>
 
+
+<h3>Bio</h3>
+
 <p>
 
 <?php
 
-echo $author['bio'];
+echo $author['bio']
+
+?? "No bio added";
 
 ?>
 
