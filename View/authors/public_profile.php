@@ -1,8 +1,11 @@
 <?php
 
-include("../../config/database.php");
+include("../../Config/database.php");
 
-// URL থেকে Author ID
+
+// ==========================
+// AUTHOR ID CHECK
+// ==========================
 
 if(!isset($_GET['id'])){
 
@@ -13,7 +16,9 @@ if(!isset($_GET['id'])){
 $authorId = $_GET['id'];
 
 
+// ==========================
 // AUTHOR QUERY
+// ==========================
 
 $query = "
 
@@ -40,7 +45,9 @@ if(!$author){
 }
 
 
+// ==========================
 // SOCIAL LINKS
+// ==========================
 
 $socialLinks = [];
 
@@ -49,6 +56,7 @@ if(!empty($author['social_links'])){
     $socialLinks = json_decode(
 
         $author['social_links'],
+
         true
 
     );
@@ -56,58 +64,76 @@ if(!empty($author['social_links'])){
 }
 
 
-// ARTICLES
+// ==========================
+// PUBLISHED ARTICLES
+// ==========================
 
-$articleQuery = "
+$articles = [];
 
-SELECT *
-FROM articles
-WHERE author_id=?
-AND status='published'
-ORDER BY created_at DESC
+try{
 
-";
+    $articleQuery = "
 
-$articleStmt =
+    SELECT *
+    FROM articles
+    WHERE author_id=?
+    AND status='published'
+    ORDER BY created_at DESC
 
-$conn->prepare(
+    ";
 
-    $articleQuery
+    $articleStmt =
 
-);
+    $conn->prepare(
 
-$articleStmt->execute([
+        $articleQuery
 
-    $authorId
+    );
 
-]);
+    $articleStmt->execute([
 
-$articles =
+        $authorId
 
-$articleStmt->fetchAll(
+    ]);
 
-    PDO::FETCH_ASSOC
+    $articles =
 
-);
+    $articleStmt->fetchAll(
+
+        PDO::FETCH_ASSOC
+
+    );
+
+}catch(Exception $e){
+
+    $articles = [];
+
+}
 
 
-// IMAGE PATH
+// ==========================
+// PROFILE IMAGE PATH
+// ==========================
 
-$image =
+if(
 
-!empty(
+    !empty($author['profile_pic_path'])
 
-    $author['profile_pic_path']
+){
 
-)
+    $image =
 
-?
+    "/Webtech_Project_Group-10/" .
 
-"../../".$author['profile_pic_path']
+    $author['profile_pic_path'];
 
-:
+}else{
 
-"../../public/uploads/avatars/default.png";
+    $image =
+
+    "/Webtech_Project_Group-10/Public/uploads/avatars/default.png";
+
+}
 
 ?>
 
@@ -117,13 +143,14 @@ $image =
 
 <head>
 
-<title>Author Profile</title>
+    <title>Author Profile</title>
 
 </head>
 
 <body>
 
 <h2>Author Profile</h2>
+
 
 <img
 
@@ -139,6 +166,7 @@ alt="Profile Image"
 
 <br><br>
 
+
 <h3>
 
 <?php
@@ -149,22 +177,24 @@ echo $author['name'];
 
 </h3>
 
+
+<h3>Bio</h3>
+
 <p>
 
 <?php
 
-echo $author['bio'];
+echo $author['bio']
+
+?? "No bio added";
 
 ?>
 
 </p>
 
 
-<h3>
+<h3>Social Links</h3>
 
-Social Links
-
-</h3>
 
 <p>
 
@@ -182,9 +212,7 @@ target="_blank"
 
 echo $socialLinks['twitter']
 
-??
-
-'No Twitter';
+?? "No Twitter";
 
 ?>
 
@@ -209,9 +237,7 @@ target="_blank"
 
 echo $socialLinks['github']
 
-??
-
-'No Github';
+?? "No GitHub";
 
 ?>
 
@@ -220,27 +246,20 @@ echo $socialLinks['github']
 </p>
 
 
-<h3>
+<h3>Published Articles</h3>
 
-Published Articles
-
-</h3>
 
 <?php
 
 if(!empty($articles)){
 
-foreach(
-
-$articles as $article
-
-){
+    foreach($articles as $article){
 
 ?>
 
 <p>
 
-•
+
 
 <?php
 
@@ -252,21 +271,20 @@ echo $article['title'];
 
 <?php
 
-}
+    }
 
 }else{
 
-echo
-
-"No published articles found";
+    echo "No published articles found";
 
 }
 
 ?>
 
+
 <br><br>
 
-<a href="../../public/index.php">
+<a href="../../Public/index.php">
 
 Home
 

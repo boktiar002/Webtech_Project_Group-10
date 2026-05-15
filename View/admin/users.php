@@ -2,7 +2,7 @@
 
 session_start();
 
-include("../../config/database.php");
+include("../../Config/database.php");
 
 if(!isset($_SESSION['user_id'])){
 

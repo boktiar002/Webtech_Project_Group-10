@@ -11,20 +11,28 @@ if(!isset($_SESSION['user_id'])){
 ?>
 
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
     <title>Profile</title>
+
 </head>
+
 <body>
 
 <h2>User Profile Management</h2>
 
 <p>
+
 Update your bio, social links and profile picture
+
 </p>
+
 <form
 
-action="../../controllers/ProfileController.php"
+action="../../Controller/ProfileController.php"
 
 method="POST"
 
@@ -69,9 +77,13 @@ type="file"
 name="avatar"
 accept=".jpg,.jpeg,.png"
 >
+
 <p>
+
 Accepted formats: JPG, JPEG, PNG
+
 </p>
+
 <br><br>
 
 <button
@@ -86,4 +98,5 @@ Update Profile
 </form>
 
 </body>
+
 </html>

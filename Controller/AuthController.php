@@ -2,7 +2,7 @@
 
 session_start();
 
-include("../config/database.php");
+include("../Config/database.php");
 
 
 // ==========================
@@ -282,7 +282,7 @@ if(isset($_POST['login'])){
 
             header(
 
-                "Location:../public/index.php"
+                "Location:../Public/index.php"
 
             );
 
