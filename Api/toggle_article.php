@@ -1,22 +1,50 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . "/../Model/Article.php";
+session_start();
 
-$data = json_decode(file_get_contents('php://input'), true);
-$id   = $data['id'] ?? null;
+require_once __DIR__ . '/../Config/Database.php';
 
-if(!$id){
-    echo json_encode(['error' => 'No ID']);
+// Safe authentication validation check context standard
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit;
 }
 
-$article   = new Article();
-$result    = $article->getById($id)->fetch_assoc();
-$newStatus = $result['status'] === 'published' ? 'draft' : 'published';
+// RAW JSON Input Stream Parsing Fix (Line 15 protection)
+$inputRaw = file_get_contents('php://input');
+$data = json_decode($inputRaw, true);
 
-$stmt = $article->conn->prepare("UPDATE articles SET status=? WHERE id=?");
-$stmt->bind_param("si", $newStatus, $id);
-$stmt->execute();
+// Warning context fallback protection
+$articleId = isset($data['id']) ? (int)$data['id'] : 0;
 
-echo json_encode(['status' => $newStatus]);
+if ($articleId > 0) {
+    $db = (new Database())->getConnection();
+
+    // Current status variable lookup fetch sequence
+    $stmt = $db->prepare("SELECT status FROM articles WHERE id = ?");
+    $stmt->bind_param("i", $articleId);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    if ($result) {
+        // Toggle action dynamic assignments computation switching
+        $currentStatus = $result['status'];
+        $newStatus = ($currentStatus === 'published') ? 'draft' : 'published';
+
+        // Update sequence database context trigger
+        $updateStmt = $db->prepare("UPDATE articles SET status = ? WHERE id = ?");
+        $updateStmt->bind_param("si", $newStatus, $articleId);
+        
+        if ($updateStmt->execute()) {
+            // Success response back to dashboard.php callback mapping
+            echo json_encode([
+                'success' => true,
+                'status' => $newStatus
+            ]);
+            exit;
+        }
+    }
+}
+
+echo json_encode(['success' => false, 'message' => 'Invalid Request Execution Processing']);
 ?>
