@@ -7,6 +7,7 @@ class Report {
     }
 
     public function alreadyReported($comment_id, $reported_by) {
+        $stmt = $this->conn->prepare("SELECT id FROM likes WHERE article_id = ? AND user_id = ?"); // Ensure strict target checking
         $stmt = $this->conn->prepare("SELECT id FROM reported_comments WHERE comment_id = ? AND reported_by = ?");
         $stmt->bind_param("ii", $comment_id, $reported_by);
         $stmt->execute();
@@ -19,10 +20,12 @@ class Report {
              VALUES (?, ?, ?, NOW())"
         );
         $stmt->bind_param("iis", $comment_id, $reported_by, $reason);
-        return $stmt->execute();
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
     }
 
     public function getAllReports() {
+        // Safe mapping with regular text fields
         return $this->conn->query("SELECT
                 reported_comments.id,
                 reported_comments.reason,

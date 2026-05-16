@@ -2,11 +2,10 @@ async function submitComment(articleId) {
     const bodyField = document.getElementById('comment-text');
     const messageDiv = document.getElementById('comment-message');
     const body = bodyField ? bodyField.value : '';
-    const userId = window.currentUserId;
 
-    if (!articleId || !userId) {
+    if (!articleId) {
         if (messageDiv) {
-            messageDiv.innerHTML = '<span style="color:#b45309;">Please log in before commenting.</span>';
+            messageDiv.innerHTML = '<span style="color:#dc2626;">Invalid Article Session.</span>';
         }
         return;
     }
@@ -19,12 +18,12 @@ async function submitComment(articleId) {
     }
 
     try {
-        const response = await fetch('/Webtech_Project_Group-10/Api/comment/create.php', {
+        // Path align করা হয়েছে সরাসরি Api ফোল্ডারের সাথে
+        const response = await fetch('/Webtech_Project_Group-10/Api/comment_create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 article_id: articleId,
-                user_id: userId,
                 body: body
             })
         });
@@ -32,22 +31,23 @@ async function submitComment(articleId) {
         const result = await response.json();
 
         if (result.success) {
-            bodyField.value = '';
-            window.location.reload();
+            if (bodyField) bodyField.value = '';
+            window.location.reload(); // কমেন্ট পোস্ট হওয়ার পর পেজ রিফ্রেশ করে কমেন্ট দেখাবে
         } else if (messageDiv) {
             messageDiv.innerHTML = `<span style="color:#dc2626;">${result.message}</span>`;
         }
     } catch (error) {
-        console.error('Fetch Error:', error);
+        console.error("Comment Error:", error);
         if (messageDiv) {
-            messageDiv.innerHTML = '<span style="color:#dc2626;">Network error. Check console for details.</span>';
+            messageDiv.innerHTML = '<span style="color:#dc2626;">Error submitting comment. Check console.</span>';
         }
     }
 }
 
 function openReportModal(commentId) {
     const modal = document.getElementById('report-modal');
-    document.getElementById('report-comment-id').value = commentId;
+    const inputField = document.getElementById('report-comment-id');
+    if (inputField) inputField.value = commentId;
     if (modal) {
         modal.style.display = 'flex';
     }
@@ -63,23 +63,31 @@ function closeReportModal() {
 async function sendReport() {
     const commentId = document.getElementById('report-comment-id').value;
     const reason = document.getElementById('report-reason').value;
-    const userId = window.currentUserId;
 
-    if (!commentId || !userId) {
-        alert('Please log in before reporting a comment.');
+    if (!commentId) {
+        alert('Invalid Comment Target.');
+        return;
+    }
+
+    if (!reason) {
+        alert('Please select a reason.');
         return;
     }
 
     try {
+        // FIX: তোমার ফোল্ডার স্ট্রাকচার (Api -> report -> create.php) অনুযায়ী পাথ সেট করা হয়েছে
         const response = await fetch('/Webtech_Project_Group-10/Api/report/create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 comment_id: commentId,
-                user_id: userId,
                 reason: reason
             })
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const result = await response.json();
         alert(result.message);
@@ -88,7 +96,7 @@ async function sendReport() {
             closeReportModal();
         }
     } catch (error) {
-        console.error('Report Error:', error);
-        alert('Network error while reporting.');
+        console.error("Report Error:", error);
+        alert("Failed to submit report. Please check the network log.");
     }
 }

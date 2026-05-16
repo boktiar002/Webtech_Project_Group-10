@@ -1,59 +1,76 @@
 <?php
 class Comment {
-    private $db;
+    private $conn;
 
     public function __construct($db) {
-        $this->db = $db;
+        $this->conn = $db;
     }
 
-    public function create($article_id, $user_id, $body) {
-        return $this->insertComment($article_id, $user_id, $body);
+    public function getCommentsByArticle($articleId) {
+        $query = "SELECT comments.*, users.name AS user_name 
+                  FROM comments 
+                  JOIN users ON comments.user_id = users.id 
+                  WHERE comments.article_id = ? 
+                  ORDER BY comments.created_at DESC";
+                  
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $articleId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
     }
 
-    public function insertComment($article_id, $user_id, $body) {
-        $stmt = $this->db->prepare("INSERT INTO comments (article_id, user_id, body) VALUES (?, ?, ?)");
-        $stmt->bind_param("iis", $article_id, $user_id, $body);
+    public function createComment($articleId, $userId, $body) {
+        $stmt = $this->conn->prepare("INSERT INTO comments (article_id, user_id, body, created_at) VALUES (?, ?, ?, NOW())");
+        $stmt->bind_param("iis", $articleId, $userId, $body);
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function deleteComment($commentId) {
+        $stmt = $this->conn->prepare("DELETE FROM comments WHERE id = ?");
+        $stmt->bind_param("i", $commentId);
         return $stmt->execute();
     }
 
-    public function getLastComment() {
-        $result = $this->db->query("SELECT c.*, u.name
-            FROM comments c
-            JOIN users u ON c.user_id = u.id
-            ORDER BY c.id DESC
-            LIMIT 1");
-        return $result->fetch_assoc();
+    public function reportComment($commentId, $userId, $reason) {
+        $query = "INSERT INTO comment_reports (comment_id, user_id, reason, created_at) VALUES (?, ?, ?, NOW())";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("iis", $commentId, $userId, $reason);
+        
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 
-    public function report($comment_id, $user_id, $reason) {
-        $stmt = $this->db->prepare("INSERT INTO reported_comments (comment_id, reported_by, reason) VALUES (?, ?, ?)");
-        $stmt->bind_param("iis", $comment_id, $user_id, $reason);
-        return $stmt->execute();
-    }
-
-    public function delete($id) {
-        return $this->deleteComment($id);
-    }
-
-    public function deleteComment($id) {
-        $stmt = $this->db->prepare("DELETE FROM comments WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
-    }
-
-    public function getByArticle($article_id) {
-        return $this->getCommentsByArticle($article_id)->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getCommentsByArticle($article_id) {
-        $stmt = $this->db->prepare("SELECT c.*, u.name
-            FROM comments c
-            JOIN users u ON c.user_id = u.id
-            WHERE c.article_id = ?
-            ORDER BY c.created_at DESC");
-        $stmt->bind_param("i", $article_id);
+    public function getReportedComments() {
+        $query = "SELECT 
+                    r.id,
+                    r.comment_id,
+                    r.reason,
+                    c.body AS comment_body,
+                    a.title,
+                    u.name AS reporter_name
+                  FROM comment_reports r
+                  JOIN comments c ON r.comment_id = c.id
+                  JOIN users u ON r.user_id = u.id
+                  JOIN articles a ON c.article_id = a.id
+                  ORDER BY r.created_at DESC";
+                  
+        $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->get_result();
+    }
+
+    public function dismissReport($reportId) {
+        $stmt = $this->conn->prepare("DELETE FROM comment_reports WHERE id = ?");
+        $stmt->bind_param("i", $reportId);
+        return $stmt->execute();
     }
 }
 ?>

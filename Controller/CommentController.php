@@ -8,6 +8,7 @@ class CommentController {
     public function __construct($db) {
         $this->comment = new Comment($db);
     }
+
     public function createComment($article_id, $user_id, $body) {
         if (strlen(trim($body)) < 5) {
             return [
@@ -16,14 +17,15 @@ class CommentController {
             ];
         }
 
-        $inserted = $this->comment->insertComment($article_id, $user_id, $body);
+        // FIX: insertComment-এর বদলে মডেলের সঠিক মেثড 'createComment' কল করা হয়েছে
+        $inserted = $this->comment->createComment($article_id, $user_id, $body);
 
         if ($inserted) {
-            $newComment = $this->comment->getLastComment();
+            // FIX: getLastComment() মেথডটি মডেল ফাইলে মিসিং থাকায় এবং পেজ অটো-রিফ্রেশ হওয়ায় 
+            // সরাসরি সাকসেস রেসপন্স রিটার্ন করা হলো।
             return [
                 'success' => true,
-                'message' => 'Comment posted successfully!',
-                'comment' => $newComment
+                'message' => 'Comment posted successfully!'
             ];
         }
 
@@ -32,9 +34,13 @@ class CommentController {
             'message' => 'Internal Server Error: Could not save comment.'
         ];
     }
+
     public function getArticleComments($article_id) {
         try {
+            // মডেল থেকে MySQLi result set নেওয়া হচ্ছে
             $stmt = $this->comment->getCommentsByArticle($article_id);
+            
+            // কুয়েরি ডেটা অ্যাসোসিয়েটিভ অ্যারেতে কনভার্ট করা হচ্ছে
             $comments = $stmt->fetch_all(MYSQLI_ASSOC);
             
             return [
@@ -49,3 +55,4 @@ class CommentController {
         }
     }
 }
+?>

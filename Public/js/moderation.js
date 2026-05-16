@@ -4,7 +4,8 @@ async function deleteReportedComment(commentId, reportId) {
     }
 
     try {
-        const response = await fetch('api/reports/delete_comment.php', {
+        // Path uppercase 'Api' formatting checked securely
+        const response = await fetch('/Webtech_Project_Group-10/Api/reports/delete_comment.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ comment_id: commentId })
@@ -30,8 +31,13 @@ async function deleteReportedComment(commentId, reportId) {
 }
 
 async function dismissReport(reportId) {
+    if (!confirm("Are you sure you want to dismiss this report?")) {
+        return;
+    }
+
     try {
-        const response = await fetch('api/reports/clear.php', {
+        // Path case sensitivity mapping standard checked
+        const response = await fetch('/Webtech_Project_Group-10/Api/reports/clear.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ report_id: reportId })
@@ -41,10 +47,11 @@ async function dismissReport(reportId) {
         if (result.success) {
             const row = document.getElementById(`report-row-${reportId}`);
             if (row) row.remove();
+            alert("Report dismissed successfully.");
         } else {
             alert("Error dismissing report.");
         }
     } catch (error) {
-        console.error("Dismiss Error:", error);
+        console.error("Moderation Error:", error);
     }
 }

@@ -1,56 +1,40 @@
 <?php
-
+header('Content-Type: application/json');
 session_start();
 
 require_once __DIR__ . '/../../Config/Database.php';
-
-header("Content-Type: application/json");
-
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Login Required"
-    ]);
-    exit();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access.']);
+    exit;
 }
 
-if ($_SESSION['role'] != "admin") {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Admin Only"
-    ]);
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $userId = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
+
+    if ($userId > 0) {
+        $db = (new Database())->getConnection();
+        $sql = "UPDATE users SET role = 'author', pending_author = 0 WHERE id = ? AND role = 'reader'";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        
+        if ($stmt->execute() && $stmt->affected_rows > 0) {
+            echo json_encode([
+                'success' => true, 
+                'message' => 'User successfully promoted to Author!',
+                'new_role' => 'author'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'User not found, already an author, or query failed.'
+            ]);
+        }
+        $stmt->close();
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid User ID.']);
+    }
+    exit;
 }
 
-if (!isset($_POST['user_id'])) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "User ID Missing"
-    ]);
-    exit();
-}
-
-$userId = (int) $_POST['user_id'];
-$connection = (new Database())->getConnection();
-
-$query = "UPDATE users
-SET role='author',
-pending_author=0
-WHERE id=?";
-
-$stmt = $connection->prepare($query);
-$stmt->bind_param("i", $userId);
-$success = $stmt->execute();
-
-if ($success) {
-    echo json_encode([
-        "status" => "success",
-        "message" => "User Promoted"
-    ]);
-} else {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Promotion Failed"
-    ]);
-}
+echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 ?>
