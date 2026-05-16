@@ -3,8 +3,6 @@ header('Content-Type: application/json');
 session_start();
 
 require_once __DIR__ . '/../../Config/Database.php';
-
-// Strict Admin Authorization Check
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo json_encode(['success' => false, 'message' => 'Unauthorized access.']);
     exit;
@@ -15,8 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($userId > 0) {
         $db = (new Database())->getConnection();
-        
-        // SQL query to change role and clear pending status
         $sql = "UPDATE users SET role = 'author', pending_author = 0 WHERE id = ? AND role = 'reader'";
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $userId);
