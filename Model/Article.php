@@ -21,8 +21,14 @@ class Article {
     }
 
     public function getAll() {
-        return $this->conn->query("SELECT * FROM articles ORDER BY created_at DESC");
-    }
+    return $this->conn->query(
+        "SELECT articles.*, COUNT(comments.id) as comment_count 
+         FROM articles 
+         LEFT JOIN comments ON comments.article_id = articles.id 
+         GROUP BY articles.id 
+         ORDER BY articles.created_at DESC"
+    );
+}
 
     public function getPublished($category_id = null) {
         $sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
