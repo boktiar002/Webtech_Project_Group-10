@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../Models/Database.php";
+include __DIR__ . '/../Config/Database.php';
 
 if (!isset($_GET['q']) || trim($_GET['q']) === '') {
     echo json_encode([]);

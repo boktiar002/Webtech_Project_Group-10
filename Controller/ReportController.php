@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Report.php';
+require_once __DIR__ . '/../Model/Report.php';
 
 class ReportController {
     private $db;

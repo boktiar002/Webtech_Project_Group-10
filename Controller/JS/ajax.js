@@ -13,11 +13,11 @@ function filterCategory(btn, categoryId)
     var url = "";
     if(categoryId)
     {
-        url = "../Api/articles.php?category_id=" + categoryId;
+        url = APP_ROOT + "/Api/articles.php?category_id=" + categoryId;
     }
     else
     {
-        url = "../Api/articles.php";
+        url = APP_ROOT + "/Api/articles.php";
     }
 
     var xhttp = new XMLHttpRequest();
@@ -44,14 +44,7 @@ function filterCategory(btn, categoryId)
                 card.className = 'card';
 
                 var img = document.createElement('img');
-                if(a.featured_image_path)
-                {
-                    img.src = 'public/uploads/articles/' + a.featured_image_path;
-                }
-                else
-                {
-                    img.src = 'https://placehold.co/400x180';
-                }
+                img.src = a.featured_image_path ? a.featured_image_path : 'https://placehold.co/400x180';
 
                 var cardBody = document.createElement('div');
                 cardBody.className = 'card-body';
@@ -161,7 +154,7 @@ function liveSearch()
                 dropdown.style.display = 'none';
             }
         }
-        xhttp.open("GET", "../Api/search.php?q=" + encodeURIComponent(q), true);
+        xhttp.open("GET", APP_ROOT + "/Api/search.php?q=" + encodeURIComponent(q), true);
         xhttp.send();
     }, 300);
 }
@@ -184,23 +177,22 @@ function toggleLike(articleId)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
     {
-        if(this.readyState == 4 && this.status == 200)
+        if(this.readyState !== 4) {
+            return;
+        }
+
+        if(this.status == 200)
         {
             var data = JSON.parse(this.responseText);
             var btn = document.getElementById('like-btn');
             var countSpan = document.getElementById('like-count');
 
-            countSpan.textContent = data.count;
-
-            if(data.liked)
-            {
-                btn.classList.add('liked');
-                btn.childNodes[0].textContent = '❤️ ';
+            if (countSpan) {
+                countSpan.textContent = data.count;
             }
-            else
-            {
-                btn.classList.remove('liked');
-                btn.childNodes[0].textContent = '🤍 ';
+
+            if (btn) {
+                btn.classList.toggle('liked', !!data.liked);
             }
         }
         else
@@ -208,7 +200,7 @@ function toggleLike(articleId)
             alert('Something went wrong. Try again.');
         }
     }
-    xhttp.open("POST", "../Api/likes.php", true);
+    xhttp.open("POST", APP_ROOT + "/Api/likes.php", true);
     xhttp.setRequestHeader("content-type", "application/json");
     xhttp.send(JSON.stringify({article_id: articleId}));
 }

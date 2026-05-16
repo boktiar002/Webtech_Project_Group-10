@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 <?php
-require_once __DIR__ . '/../models/Comment.php';
+require_once __DIR__ . '/../Model/Comment.php';
 
 class CommentController {
 
@@ -38,7 +35,7 @@ class CommentController {
     public function getArticleComments($article_id) {
         try {
             $stmt = $this->comment->getCommentsByArticle($article_id);
-            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $comments = $stmt->fetch_all(MYSQLI_ASSOC);
             
             return [
                 'success' => true,
@@ -52,6 +49,3 @@ class CommentController {
         }
     }
 }
-=======
->>>>>>> 3858bd3f316c8c63d61564f241e12d11ff6e6298
->>>>>>> 43e5fcb99a6573a906057cc3798c99421378d774

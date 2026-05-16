@@ -4,46 +4,36 @@ require_once __DIR__ . '/../Config/Database.php';
 class Like {
     private $connection;
 
-    function __construct() {
+    public function __construct() {
         $db = new Database();
         $this->connection = $db->getConnection();
     }
 
-    // check if user already liked
-    function hasLiked($article_id, $user_id) {
-        $sql = "SELECT id FROM likes WHERE article_id = ? AND user_id = ?";
-        $statement = $this->connection->prepare($sql);
-        $statement->bind_param("ii", $article_id, $user_id);
-        $statement->execute();
-        $result = $statement->get_result();
-        return $result->num_rows > 0;
+    public function hasLiked($article_id, $user_id) {
+        $stmt = $this->connection->prepare("SELECT id FROM likes WHERE article_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $article_id, $user_id);
+        $stmt->execute();
+        return $stmt->get_result()->num_rows > 0;
     }
 
-    // add like
-    function like($article_id, $user_id) {
-        $sql = "INSERT INTO likes (article_id, user_id) VALUES (?, ?)";
-        $statement = $this->connection->prepare($sql);
-        $statement->bind_param("ii", $article_id, $user_id);
-        $statement->execute();
+    public function like($article_id, $user_id) {
+        $stmt = $this->connection->prepare("INSERT INTO likes (article_id, user_id) VALUES (?, ?)");
+        $stmt->bind_param("ii", $article_id, $user_id);
+        return $stmt->execute();
     }
 
-    // remove like
-    function unlike($article_id, $user_id) {
-        $sql = "DELETE FROM likes WHERE article_id = ? AND user_id = ?";
-        $statement = $this->connection->prepare($sql);
-        $statement->bind_param("ii", $article_id, $user_id);
-        $statement->execute();
+    public function unlike($article_id, $user_id) {
+        $stmt = $this->connection->prepare("DELETE FROM likes WHERE article_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $article_id, $user_id);
+        return $stmt->execute();
     }
 
-    // get like count
-    function getCount($article_id) {
-        $sql = "SELECT COUNT(*) AS total FROM likes WHERE article_id = ?";
-        $statement = $this->connection->prepare($sql);
-        $statement->bind_param("i", $article_id);
-        $statement->execute();
-        $result = $statement->get_result();
-        $row = $result->fetch_assoc();
-        return $row['total'];
+    public function getCount($article_id) {
+        $stmt = $this->connection->prepare("SELECT COUNT(*) AS total FROM likes WHERE article_id = ?");
+        $stmt->bind_param("i", $article_id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        return (int)($row['total'] ?? 0);
     }
 }
 ?>
