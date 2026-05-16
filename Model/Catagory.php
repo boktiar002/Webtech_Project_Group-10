@@ -7,8 +7,13 @@ class Category {
     }
 
     public function getAll(){
-        return $this->conn->query("SELECT * FROM categories");
-    }
+    return $this->conn->query(
+        "SELECT categories.*, COUNT(articles.id) as article_count 
+         FROM categories 
+         LEFT JOIN articles ON articles.category_id = categories.id 
+         GROUP BY categories.id"
+    );
+}
 
     public function create($name){
         $stmt = $this->conn->prepare("INSERT INTO categories (name) VALUES (?)");
