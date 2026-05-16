@@ -4,8 +4,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0); 
 
 try {
-    require_once __DIR__ . '/../../config/database.php';
-    require_once __DIR__ . '/../../controllers/ReportController.php';
+    require_once __DIR__ . '/../../Config/Database.php';
+    require_once __DIR__ . '/../../Controller/ReportController.php';
 
     $database = new Database();
     $db = $database->getConnection();

@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json");
-require_once '../../config/database.php';
-require_once '../../controllers/CommentController.php';
+require_once __DIR__ . '/../../Config/Database.php';
+require_once __DIR__ . '/../../Controller/CommentController.php';
 
 $db = (new Database())->getConnection();
 $controller = new CommentController($db);

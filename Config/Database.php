@@ -5,15 +5,26 @@ class Database {
     private $username = "root";
     private $password = "";
     public $conn;
+
     public function getConnection() {
-        $this->conn = null;
-        try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception) {
-            echo "Connection error: " . $exception->getMessage();
+        if ($this->conn instanceof mysqli) {
+            return $this->conn;
         }
+
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try {
+            $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
+            $this->conn->set_charset("utf8mb4");
+        } catch (mysqli_sql_exception $exception) {
+            die("Connection error: " . $exception->getMessage());
+        }
+
         return $this->conn;
+    }
+
+    public function connection() {
+        return $this->getConnection();
     }
 }
 ?>

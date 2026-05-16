@@ -1,38 +1,37 @@
 <?php
-include "../Models/Database.php";
-session_start();
-
-// read site config from data.json
-$json_data = file_get_contents("../data.json");
-$config = json_decode($json_data, true);
+// Database and session are initialized in index.php.
 $database = new Database();
-$connection = $database->connection();
+$connection = $database->getConnection();
 
-// publish scheduled articles
-$sql = "UPDATE articles SET status = 'published'
-        WHERE status = 'draft'
-        AND publish_at IS NOT NULL
-        AND publish_at <= NOW()";
-$connection->query($sql);
+$connection->query(
+    "UPDATE articles
+     SET status = 'published'
+     WHERE status = 'draft'
+       AND publish_at IS NOT NULL
+       AND publish_at <= NOW()"
+);
 
-// get all categories
-$cat_sql = "SELECT * FROM categories";
-$cat_result = $connection->query($cat_sql);
-$categories = $cat_result->fetch_all(MYSQLI_ASSOC);
+$categories = [];
+$categoryResult = $connection->query("SELECT id, name FROM categories ORDER BY name ASC");
+while ($row = $categoryResult->fetch_assoc()) {
+    $categories[] = $row;
+}
 
-// get all published articles
-$art_sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
-            c.name AS category_name,
-            (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
-            FROM articles a
-            LEFT JOIN users u ON a.author_id = u.id
-            LEFT JOIN categories c ON a.category_id = c.id
-            WHERE a.status = 'published'
-            ORDER BY a.created_at DESC";
-$art_result = $connection->query($art_sql);
-$articles = $art_result->fetch_all(MYSQLI_ASSOC);
+$articles = [];
+$articleQuery = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
+        c.name AS category_name,
+        (SELECT COUNT(*) FROM likes WHERE article_id = a.id) AS like_count
+    FROM articles a
+    LEFT JOIN users u ON a.author_id = u.id
+    LEFT JOIN categories c ON a.category_id = c.id
+    WHERE a.status = 'published'
+    ORDER BY a.created_at DESC";
+$articleResult = $connection->query($articleQuery);
+while ($row = $articleResult->fetch_assoc()) {
+    $articles[] = $row;
+}
 
-include "../View/Layouts/header.php";
-include "../View/Public/home.php";
-include "../View/Layouts/footer.php";
+include __DIR__ . '/../View/Layouts/header.php';
+include __DIR__ . '/../View/public/home.php';
+include __DIR__ . '/../View/Layouts/footer.php';
 ?>
