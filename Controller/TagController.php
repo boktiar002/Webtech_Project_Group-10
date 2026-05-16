@@ -22,7 +22,7 @@ class TagController {
         exit();
     }
 
-    // Delete tag
+    // Delete Tag
     public function delete($id) {
         return $this->tag->delete($id);
     }
