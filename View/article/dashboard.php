@@ -207,23 +207,22 @@ $result = $controller->index();
 
 <script>
 function toggleStatus(id, btn) {
-    fetch('/Webtech_Project_Group-10/Api/toggle_article.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: id})
-    })
-    .then(r => r.json())
-    .then(data => {
-        const badge = document.getElementById('badge-' + id);
-
-        if (badge) {
-            badge.textContent = data.status;
-            badge.classList.toggle('published', data.status === 'published');
-            badge.classList.toggle('draft', data.status !== 'published');
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.responseText);
+            let badge = document.getElementById("badge-" + id);
+            if(badge) {
+                badge.textContent = data.status;
+                badge.classList.toggle("published", data.status === "published");
+                badge.classList.toggle("draft", data.status !== "published");
+            }
+            btn.textContent = data.status === "published" ? "Unpublish" : "Publish";
         }
-
-        btn.textContent = data.status === 'published' ? 'Unpublish' : 'Publish';
-    });
+    }
+    xhttp.open("POST", "/Webtech_Project_Group-10/Api/toggle_article.php", true);
+    xhttp.setRequestHeader("content-type", "application/json");
+    xhttp.send(JSON.stringify({id: id}));
 }
 </script>
 <?php include __DIR__ . "/../Layouts/footer.php"; ?>
