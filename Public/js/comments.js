@@ -1,3 +1,5 @@
+// public/comments.js
+
 async function submitComment(articleId) {
     const bodyField = document.getElementById('comment-text');
     const messageDiv = document.getElementById('comment-message');
@@ -19,7 +21,8 @@ async function submitComment(articleId) {
     }
 
     try {
-        const response = await fetch('/Webtech_Project_Group-10/Api/comment/create.php', {
+        // FIX: Path align করা হয়েছে সরাসরি Api ফোল্ডারের সাথে
+        const response = await fetch('/Webtech_Project_Group-10/Api/comment_create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -32,22 +35,23 @@ async function submitComment(articleId) {
         const result = await response.json();
 
         if (result.success) {
-            bodyField.value = '';
-            window.location.reload();
+            if (bodyField) bodyField.value = '';
+            window.location.reload(); // কমেন্ট পড়ার সাথে সাথে পেজ রিফ্রেশ করে কমেন্ট দেখাবে
         } else if (messageDiv) {
             messageDiv.innerHTML = `<span style="color:#dc2626;">${result.message}</span>`;
         }
     } catch (error) {
-        console.error('Fetch Error:', error);
+        console.error("Comment Error:", error);
         if (messageDiv) {
-            messageDiv.innerHTML = '<span style="color:#dc2626;">Network error. Check console for details.</span>';
+            messageDiv.innerHTML = '<span style="color:#dc2626;">Error submitting comment. Check console.</span>';
         }
     }
 }
 
 function openReportModal(commentId) {
     const modal = document.getElementById('report-modal');
-    document.getElementById('report-comment-id').value = commentId;
+    const inputField = document.getElementById('report-comment-id');
+    if (inputField) inputField.value = commentId;
     if (modal) {
         modal.style.display = 'flex';
     }
@@ -71,7 +75,8 @@ async function sendReport() {
     }
 
     try {
-        const response = await fetch('/Webtech_Project_Group-10/Api/report/create.php', {
+        // FIX: Path সঠিক করে Api/report_create.php বা প্রজেক্টের রুট এপিআই ফোল্ডারে পাঠানো হয়েছে
+        const response = await fetch('/Webtech_Project_Group-10/Api/report_create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -88,7 +93,7 @@ async function sendReport() {
             closeReportModal();
         }
     } catch (error) {
-        console.error('Report Error:', error);
-        alert('Network error while reporting.');
+        console.error("Report Error:", error);
+        alert("Failed to submit report.");
     }
 }
