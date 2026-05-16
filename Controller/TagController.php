@@ -4,21 +4,26 @@ require_once __DIR__ . "/../Model/Tag.php";
 class TagController {
     public $tag;
 
-    public function __construct(){
+    public function __construct() {
         $this->tag = new Tag();
     }
 
-    public function index(){
+    // Get all tags
+    public function index() {
         return $this->tag->getAll();
     }
 
-    public function store($name){
+    // Create New tag
+    public function store($name) {
+        $name = trim($name);
+        if(empty($name)) return false;
         $this->tag->create($name);
         header("Location: /Webtech_Project_Group-10/index.php?page=categories");
         exit();
     }
 
-    public function delete($id){
+    // Delete Tag
+    public function delete($id) {
         return $this->tag->delete($id);
     }
 }

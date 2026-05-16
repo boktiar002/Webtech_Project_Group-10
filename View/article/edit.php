@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../../Controller/ArticleController.php";
 require_once __DIR__ . "/../../Controller/CategoryController.php";
-
+session_start();
 $config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
 include __DIR__ . "/../Layouts/header.php";
 
@@ -167,7 +167,12 @@ $categories = $categoryController->index();
             <a class="back-pill" href="/Webtech_Project_Group-10/index.php?page=dashboard">Back to Dashboard</a>
         </div>
         <p>Update content, image, tags, and publish settings from one place.</p>
-
+         <?php if(isset($_SESSION['errors'])): ?>
+         <?php foreach($_SESSION['errors'] as $e): ?>
+        <p style="color:red"><?php echo $e; ?></p>
+         <?php endforeach; ?>
+          <?php unset($_SESSION['errors']); ?>
+          <?php endif; ?>
         <form method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label for="title">Title</label>

@@ -213,7 +213,7 @@ $tags = $tagController->index();
                         <div class="item-row">
                             <div>
                                 <strong><?php echo htmlspecialchars($cat['name']); ?></strong>
-                                <div class="item-meta">ID: <?php echo (int) $cat['id']; ?></div>
+                                <div class="item-meta">ID: <?php echo (int) $cat['id']; ?> | Articles: <?php echo (int) $cat['article_count']; ?></div>
                             </div>
                             <a class="delete-link" href="/Webtech_Project_Group-10/index.php?page=categories&delete_category=<?php echo $cat['id']; ?>" onclick="return confirm('Delete this category?')">Delete</a>
                         </div>
