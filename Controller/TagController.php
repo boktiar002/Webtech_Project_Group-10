@@ -13,7 +13,7 @@ class TagController {
         return $this->tag->getAll();
     }
 
-    // Create new tag
+    // Create New tag
     public function store($name) {
         $name = trim($name);
         if(empty($name)) return false;
