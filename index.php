@@ -8,6 +8,7 @@ $config = json_decode($json_data, true);
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 $id   = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
+// ── রাউটিং সুইচ কেস (Routing Switch Case) ──
 switch($page)
 {
     // ── TASK 3 — Public Reading ──
@@ -75,7 +76,7 @@ switch($page)
         }
         else
         {
-            echo "<h2 style='text-align:center; margin-top:50px;'>Access Denied</h2>";
+            echo "<h2 style='text-align:center; margin-top:50px; font-family:sans-serif;'>Access Denied</h2>";
         }
         break;
 

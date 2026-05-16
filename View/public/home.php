@@ -1,8 +1,21 @@
+<?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+    <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; font-family: system-ui, sans-serif;">
+        <div style="color: #991b1b; font-weight: 500;">
+            👋 Hello Admin! There are reported comments waiting for your review.
+        </div>
+        <a href="index.php?page=admin" 
+           style="text-decoration: none; color: white; background: #dc2626; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2); transition: background 0.2s;"
+           onmouseover="this.style.background='#b91c1c'" 
+           onmouseout="this.style.background='#dc2626'">
+           🚨 Go to Moderation Dashboard
+        </a>
+    </div>
+<?php endif; ?>
+
 <div class="container">
 
     <h2 style="margin-bottom: 20px;">Latest Articles</h2>
 
-    <!-- Category Filter Tabs -->
     <div id="category-tabs" style="margin-bottom: 24px; display:flex; gap:10px; flex-wrap:wrap;">
         <button class="tab-btn active" data-id="" onclick="filterCategory(this, '')">All</button>
         <?php foreach ($categories as $cat): ?>
@@ -13,7 +26,6 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- Article Cards Grid -->
     <div id="articles-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
         <?php foreach ($articles as $article): ?>
             <?php include __DIR__ . '/article_card.php'; ?>
