@@ -50,20 +50,27 @@ class Comment {
 
     public function getReportedComments() {
         $query = "SELECT 
-                    r.id AS report_id,
+                    r.id,
+                    r.comment_id,
                     r.reason,
-                    r.created_at AS reported_at,
-                    c.id AS comment_id,
                     c.body AS comment_body,
-                    u.name AS commenter_name
+                    a.title,
+                    u.name AS reporter_name
                   FROM comment_reports r
                   JOIN comments c ON r.comment_id = c.id
-                  JOIN users u ON c.user_id = u.id
+                  JOIN users u ON r.user_id = u.id
+                  JOIN articles a ON c.article_id = a.id
                   ORDER BY r.created_at DESC";
                   
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->get_result();
+    }
+
+    public function dismissReport($reportId) {
+        $stmt = $this->conn->prepare("DELETE FROM comment_reports WHERE id = ?");
+        $stmt->bind_param("i", $reportId);
+        return $stmt->execute();
     }
 }
 ?>
