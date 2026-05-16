@@ -21,14 +21,14 @@ class Article {
     }
 
     public function getAll() {
-    return $this->conn->query(
-        "SELECT articles.*, COUNT(comments.id) as comment_count 
-         FROM articles 
-         LEFT JOIN comments ON comments.article_id = articles.id 
-         GROUP BY articles.id 
-         ORDER BY articles.created_at DESC"
-    );
-}
+        return $this->conn->query(
+            "SELECT articles.*, COUNT(comments.id) as comment_count 
+             FROM articles 
+             LEFT JOIN comments ON comments.article_id = articles.id 
+             GROUP BY articles.id 
+             ORDER BY articles.created_at DESC"
+        );
+    }
 
     public function getPublished($category_id = null) {
         $sql = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
@@ -166,6 +166,18 @@ class Article {
              WHERE status = 'draft'
              AND publish_at IS NOT NULL
              AND publish_at <= NOW()");
+    }
+
+    public function toggleArticleStatus($id) {
+        $stmt = $this->conn->prepare("SELECT status FROM articles WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $newStatus = $row["status"] === "published" ? "draft" : "published";
+        $stmt2 = $this->conn->prepare("UPDATE articles SET status=? WHERE id=?");
+        $stmt2->bind_param("si", $newStatus, $id);
+        $stmt2->execute();
+        return $newStatus;
     }
 }
 ?>
