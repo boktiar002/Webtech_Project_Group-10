@@ -6,8 +6,7 @@ class Comment {
         $this->conn = $db;
     }
 
-    // FIX: এই মেথডটি মিসিং ছিল, যা এখন যোগ করা হলো
-    // এটি নির্দিষ্ট আর্টিকেলের সব কমেন্ট ইউজারের নামসহ ডাটাবেজ থেকে তুলে আনবে
+    
     public function getCommentsByArticle($articleId) {
         $query = "SELECT comments.*, users.name AS user_name 
                   FROM comments 
@@ -38,6 +37,21 @@ class Comment {
         $stmt = $this->conn->prepare("DELETE FROM comments WHERE id = ?");
         $stmt->bind_param("i", $commentId);
         return $stmt->execute();
+    }
+
+    // NEW FIX: ইউজারদের রিপোর্ট ডাটাবেজে সেভ করার মেথড (Student-4 Task)
+    // এটি যুক্ত না থাকায় এতক্ষণ "Failed to submit report" আসছিল
+    public function reportComment($commentId, $userId, $reason) {
+        // তোমার ডাটাবেজের 'comment_reports' টেবিলে ডেটা ইনসার্ট করার কুয়েরি
+        $query = "INSERT INTO comment_reports (comment_id, user_id, reason, created_at) VALUES (?, ?, ?, NOW())";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("iis", $commentId, $userId, $reason);
+        
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }
 ?>
