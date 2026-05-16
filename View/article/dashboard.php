@@ -182,6 +182,7 @@ $result = $controller->index();
                         <div class="article-meta">
                             <span>ID: <?php echo (int) $row['id']; ?></span>
                             <span>Views: <?php echo (int) $row['view_count']; ?></span>
+                            <span>Comments: <?php echo (int) $row['comment_count']; ?></span>
                             <span id="badge-<?php echo $row['id']; ?>" class="status-badge <?php echo $row['status'] == 'published' ? 'published' : 'draft'; ?>">
                                 <?php echo htmlspecialchars($row['status']); ?>
                             </span>
