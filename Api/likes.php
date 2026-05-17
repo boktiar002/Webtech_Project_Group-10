@@ -4,6 +4,7 @@ session_start();
 
 require_once __DIR__ . '/../Config/Database.php';
 
+
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'Login required']);
     exit;
@@ -19,6 +20,7 @@ if (!isset($data['article_id']) || !is_numeric($data['article_id'])) {
 $article_id = (int) $data['article_id'];
 $user_id = (int) $_SESSION['user_id'];
 
+
 $connection = (new Database())->getConnection();
 
 $check_sql = "SELECT id FROM likes WHERE article_id = ? AND user_id = ?";
@@ -33,7 +35,8 @@ if ($check_result->num_rows > 0) {
     $del_stmt->bind_param("ii", $article_id, $user_id);
     $del_stmt->execute();
     $liked = false;
-} else {
+}
+else {
     $ins_sql = "INSERT INTO likes (article_id, user_id) VALUES (?, ?)";
     $ins_stmt = $connection->prepare($ins_sql);
     $ins_stmt->bind_param("ii", $article_id, $user_id);
@@ -50,6 +53,6 @@ $count_row = $count_result->fetch_assoc();
 
 echo json_encode([
     'liked' => $liked,
-    'count' => (int) ($count_row['total'] ?? 0)
-]);
+    'count' => (int) ($count_row['total'] ?? 0)]);
+
 ?>
