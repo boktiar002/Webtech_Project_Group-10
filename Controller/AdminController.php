@@ -1,5 +1,0 @@
-<?php
-
-// Admin controller placeholder
-
-?>
