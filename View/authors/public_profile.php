@@ -115,33 +115,19 @@ try{
 // PROFILE IMAGE PATH
 // ==========================
 
-if(
-
-    !empty($author['profile_pic_path'])
-
-){
+if(!empty($author['profile_pic_path'])){
 
     $image =
 
-<<<<<<< HEAD
-"/Webtech_Project_Group-10-main/" .
-
-$author['profile_pic_path'];
-=======
-    "/Webtech_Project_Group-10/" .
+    "/Webtech_Project_Group-10-main/" .
 
     $author['profile_pic_path'];
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }else{
 
     $image =
 
-<<<<<<< HEAD
     "/Webtech_Project_Group-10-main/Public/uploads/avatars/default.png";
-=======
-    "/Webtech_Project_Group-10/Public/uploads/avatars/default.png";
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }
 
@@ -155,12 +141,50 @@ $author['profile_pic_path'];
 
     <title>Author Profile</title>
 
+    <style>
+
+    body{
+
+        font-family:Arial;
+        background:#f4f4f4;
+        padding:40px;
+
+    }
+
+    .profile-card{
+
+        background:white;
+        width:500px;
+        margin:auto;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+
+    }
+
+    img{
+
+        border-radius:50%;
+        object-fit:cover;
+
+    }
+
+    a{
+
+        text-decoration:none;
+        color:blue;
+
+    }
+
+    </style>
+
 </head>
 
 <body>
 
-<h2>Author Profile</h2>
+<div class="profile-card">
 
+<h2>Author Profile</h2>
 
 <img
 
@@ -174,13 +198,7 @@ alt="Profile Image"
 
 >
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <br><br>
-
 
 <h3>
 
@@ -191,7 +209,6 @@ echo $author['name'];
 ?>
 
 </h3>
-
 
 <h3>Bio</h3>
 
@@ -207,9 +224,7 @@ echo $author['bio']
 
 </p>
 
-
 <h3>Social Links</h3>
-
 
 <p>
 
@@ -235,7 +250,6 @@ echo $socialLinks['twitter']
 
 </p>
 
-
 <p>
 
 GitHub:
@@ -260,9 +274,7 @@ echo $socialLinks['github']
 
 </p>
 
-
 <h3>Published Articles</h3>
-
 
 <?php
 
@@ -273,8 +285,6 @@ if(!empty($articles)){
 ?>
 
 <p>
-
-
 
 <?php
 
@@ -296,7 +306,6 @@ echo $article['title'];
 
 ?>
 
-
 <br><br>
 
 <a href="../../Public/index.php">
@@ -304,6 +313,8 @@ echo $article['title'];
 Home
 
 </a>
+
+</div>
 
 </body>
 
