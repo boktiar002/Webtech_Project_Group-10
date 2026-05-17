@@ -8,10 +8,9 @@ $config = json_decode($json_data, true);
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 $id   = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-// ── রাউটিং সুইচ কেস (Routing Switch Case) ──
 switch($page)
 {
-    // ── TASK 3 — Public Reading ──
+    // Boktiar 
     case 'home':
         include __DIR__ . '/Controller/home.php';
         break;
@@ -28,7 +27,7 @@ switch($page)
         }
         break;
 
-    // ── TASK 1 — Auth & Profile ──
+    // Sagor 
     case 'login':
         include __DIR__ . '/View/auth/login.php';
         break;
@@ -49,7 +48,7 @@ switch($page)
         include __DIR__ . '/public/logout.php';
         break;
 
-    // ── TASK 2 — Article Management ──
+    // Abir
     case 'dashboard':
         include __DIR__ . '/View/article/dashboard.php';
         break;
@@ -66,7 +65,7 @@ switch($page)
         include __DIR__ . '/Controller/TagController.php';
         break;
 
-    // ── TASK 4 — Comments & Moderation ──
+    // Roni
     case 'admin':
         if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin')
         {

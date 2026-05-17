@@ -1,7 +1,8 @@
 <?php
-// Database and session are initialized in index.php.
+
 $database = new Database();
 $connection = $database->getConnection();
+
 
 $connection->query(
     "UPDATE articles
@@ -10,6 +11,8 @@ $connection->query(
        AND publish_at IS NOT NULL
        AND publish_at <= NOW()"
 );
+
+
 
 $categories = [];
 $categoryResult = $connection->query("SELECT id, name FROM categories ORDER BY name ASC");
@@ -27,11 +30,12 @@ $articleQuery = "SELECT a.*, u.name AS author_name, u.profile_pic_path,
     WHERE a.status = 'published'
     ORDER BY a.created_at DESC";
 $articleResult = $connection->query($articleQuery);
-while ($row = $articleResult->fetch_assoc()) {
+while($row = $articleResult->fetch_assoc()) {
     $articles[] = $row;
 }
 
 include __DIR__ . '/../View/Layouts/header.php';
 include __DIR__ . '/../View/public/home.php';
 include __DIR__ . '/../View/Layouts/footer.php';
+
 ?>

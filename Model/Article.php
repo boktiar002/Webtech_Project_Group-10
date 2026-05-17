@@ -1,13 +1,17 @@
 <?php
+
 require_once __DIR__ . '/../Config/Database.php';
 
 class Article {
-    public $conn;
+
+
+public $conn;
 
     public function __construct() {
         $db = new Database();
         $this->conn = $db->getConnection();
     }
+
 
     public function create($title, $body, $category_id, $image_path, $status, $publish_at) {
         $author_id = $_SESSION['user_id'] ?? 1;
@@ -72,12 +76,13 @@ class Article {
     }
 
     public function update($id, $title, $body, $category_id, $image_path, $status, $publish_at) {
-        if ($image_path) {
+        if($image_path) {
             $stmt = $this->conn->prepare(
                 "UPDATE articles SET title=?, body=?, category_id=?, featured_image_path=?, status=?, publish_at=? WHERE id=?"
             );
             $stmt->bind_param("ssisssi", $title, $body, $category_id, $image_path, $status, $publish_at, $id);
-        } else {
+        } 
+        else{
             $stmt = $this->conn->prepare(
                 "UPDATE articles SET title=?, body=?, category_id=?, status=?, publish_at=? WHERE id=?"
             );
@@ -85,6 +90,8 @@ class Article {
         }
         return $stmt->execute();
     }
+
+
 
     public function delete($id) {
         $stmt = $this->conn->prepare("DELETE FROM articles WHERE id = ?");
@@ -111,6 +118,8 @@ class Article {
         return $stmt3->execute();
     }
 
+
+
     public function deleteTagsByArticle($article_id) {
         $stmt = $this->conn->prepare("DELETE FROM article_tags WHERE article_id = ?");
         $stmt->bind_param("i", $article_id);
@@ -134,11 +143,14 @@ class Article {
         return $tags;
     }
 
+
     public function incrementView($id) {
         $stmt = $this->conn->prepare("UPDATE articles SET view_count = view_count + 1 WHERE id = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+
+
 
     public function search($q) {
         $like = '%' . $q . '%';
@@ -160,6 +172,7 @@ class Article {
     public function getCategories() {
         return $this->conn->query("SELECT * FROM categories ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
     }
+
 
     public function publishScheduled() {
         return $this->conn->query("UPDATE articles SET status = 'published'
