@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../../Controller/ArticleController.php";
 
-$config = $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
+$config= $config ?? json_decode(file_get_contents(__DIR__ . "/../../data.json"), true);
 include __DIR__ . "/../Layouts/header.php";
 
 $controller = new ArticleController();
@@ -226,4 +226,5 @@ function toggleStatus(id, btn) {
     xhttp.send(JSON.stringify({id: id}));
 }
 </script>
+
 <?php include __DIR__ . "/../Layouts/footer.php"; ?>
