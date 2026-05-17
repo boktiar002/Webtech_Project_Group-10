@@ -1,14 +1,27 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-include("../../Config/database.php");
+include("../../Controller/Config/database.php");
+
+
+// ==========================
+// LOGIN CHECK
+// ==========================
 
 if(!isset($_SESSION['user_id'])){
 
     die("Login First");
 
 }
+
+
+// ==========================
+// ADMIN CHECK
+// ==========================
 
 if($_SESSION['role'] != "admin"){
 
@@ -43,58 +56,58 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     body{
 
-        font-family:Arial;
-        background:#f4f4f4;
-        padding:40px;
+        font-family: Arial;
+        background: #f4f4f4;
+        padding: 40px;
 
     }
 
     .container{
 
-        background:white;
-        padding:30px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 
     }
 
     table{
 
-        width:100%;
-        border-collapse:collapse;
+        width: 100%;
+        border-collapse: collapse;
 
     }
 
     th,
     td{
 
-        border:1px solid #ccc;
-        padding:12px;
-        text-align:center;
+        border: 1px solid #ccc;
+        padding: 12px;
+        text-align: center;
 
     }
 
     th{
 
-        background:#111827;
-        color:white;
+        background: #111827;
+        color: white;
 
     }
 
     button{
 
-        background:#111827;
-        color:white;
-        border:none;
-        padding:8px 15px;
-        border-radius:5px;
-        cursor:pointer;
+        background: #111827;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
 
     }
 
     button:hover{
 
-        background:#374151;
+        background: #374151;
 
     }
 
@@ -126,33 +139,23 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <tr>
 
     <td>
-
         <?php echo $user['id']; ?>
-
     </td>
 
     <td>
-
         <?php echo $user['name']; ?>
-
     </td>
 
     <td>
-
         <?php echo $user['email']; ?>
-
     </td>
 
     <td id="role<?php echo $user['id']; ?>">
-
         <?php echo $user['role']; ?>
-
     </td>
 
     <td>
-
         <?php echo $user['pending_author']; ?>
-
     </td>
 
     <td>
@@ -160,25 +163,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php
 
     if(
-
         $user['pending_author'] == 1
-
         &&
-
         $user['role'] == "reader"
-
     ){
 
     ?>
 
     <button
-
-    onclick="promoteUser(
-
-    <?php echo $user['id']; ?>
-
-    )"
-
+    onclick="promoteUser(<?php echo $user['id']; ?>)"
     >
 
     Promote To Author
@@ -213,16 +206,14 @@ function promoteUser(userId){
 
     })
 
-    .then(response=>response.json())
+    .then(response => response.json())
 
-    .then(data=>{
+    .then(data => {
 
         if(data.status == "success"){
 
             document.getElementById(
-
                 "role"+userId
-
             ).innerHTML = "author";
 
             alert(data.message);
@@ -237,7 +228,7 @@ function promoteUser(userId){
 
     })
 
-    .catch(error=>{
+    .catch(error => {
 
         console.log(error);
 

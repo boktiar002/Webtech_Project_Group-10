@@ -1,134 +1,101 @@
 <?php
 
-include("../../Config/database.php");
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 
-// ==========================
+// DATABASE CONNECTION
+
+include("../../Controller/Config/database.php");
+
+
 // AUTHOR ID CHECK
-// ==========================
 
-if(!isset($_GET['id'])){
+if (!isset($_GET['id'])) {
 
     die("Author ID Missing");
-
 }
 
 $authorId = $_GET['id'];
 
 
-// ==========================
 // AUTHOR QUERY
-// ==========================
 
 $query = "
-
 SELECT *
 FROM users
 WHERE id=?
-
 ";
 
 $stmt = $conn->prepare($query);
 
-$stmt->execute([
-
-    $authorId
-
-]);
+$stmt->execute([$authorId]);
 
 $author = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if(!$author){
+
+if (!$author) {
 
     die("Author Not Found");
-
 }
 
 
-// ==========================
 // SOCIAL LINKS
-// ==========================
 
 $socialLinks = [];
 
-if(!empty($author['social_links'])){
+if (!empty($author['social_links'])) {
 
-    $socialLinks = json_decode(
-
+    $decoded = json_decode(
         $author['social_links'],
-
         true
-
     );
 
+    if (is_array($decoded)) {
+
+        $socialLinks = $decoded;
+    }
 }
 
 
-// ==========================
 // PUBLISHED ARTICLES
-// ==========================
 
 $articles = [];
 
-try{
+try {
 
     $articleQuery = "
-
     SELECT *
     FROM articles
     WHERE author_id=?
     AND status='published'
     ORDER BY created_at DESC
-
     ";
 
-    $articleStmt =
+    $articleStmt = $conn->prepare($articleQuery);
 
-    $conn->prepare(
+    $articleStmt->execute([$authorId]);
 
-        $articleQuery
+    $articles = $articleStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    );
+} catch (Exception $e) {
 
-    $articleStmt->execute([
-
-        $authorId
-
-    ]);
-
-    $articles =
-
-    $articleStmt->fetchAll(
-
-        PDO::FETCH_ASSOC
-
-    );
-
-}catch(Exception $e){
-
-    $articles = [];
-
+    echo $e->getMessage();
 }
 
 
-// ==========================
-// PROFILE IMAGE PATH
-// ==========================
+// PROFILE IMAGE
 
-if(!empty($author['profile_pic_path'])){
+if (!empty($author['profile_pic_path'])) {
 
     $image =
-
     "/Webtech_Project_Group-10-main/" .
-
     $author['profile_pic_path'];
 
-}else{
+} else {
 
     $image =
-
     "/Webtech_Project_Group-10-main/Public/uploads/avatars/default.png";
-
 }
 
 ?>
@@ -143,38 +110,30 @@ if(!empty($author['profile_pic_path'])){
 
     <style>
 
-    body{
+        body{
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 40px;
+        }
 
-        font-family:Arial;
-        background:#f4f4f4;
-        padding:40px;
+        .profile-card{
+            background: white;
+            width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
 
-    }
+        img{
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-    .profile-card{
-
-        background:white;
-        width:500px;
-        margin:auto;
-        padding:30px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
-
-    }
-
-    img{
-
-        border-radius:50%;
-        object-fit:cover;
-
-    }
-
-    a{
-
-        text-decoration:none;
-        color:blue;
-
-    }
+        a{
+            text-decoration: none;
+            color: blue;
+        }
 
     </style>
 
@@ -184,135 +143,80 @@ if(!empty($author['profile_pic_path'])){
 
 <div class="profile-card">
 
-<h2>Author Profile</h2>
+    <h2>Author Profile</h2>
 
-<img
+    <img
+    src="<?php echo $image; ?>"
+    width="150"
+    height="150"
+    alt="Profile Image"
+    >
 
-src="<?php echo $image; ?>"
+    <br><br>
 
-width="150"
+    <h3>
+        <?php echo $author['name']; ?>
+    </h3>
 
-height="150"
+    <h3>Bio</h3>
 
-alt="Profile Image"
+    <p>
+        <?php echo $author['bio'] ?? "No bio added"; ?>
+    </p>
 
->
+    <h3>Social Links</h3>
 
-<br><br>
+    <p>
+        Twitter:
+        <a
+        href="<?php echo $socialLinks['twitter'] ?? '#'; ?>"
+        target="_blank"
+        >
+        <?php
+        echo $socialLinks['twitter']
+        ?? "No Twitter";
+        ?>
+        </a>
+    </p>
 
-<h3>
+    <p>
+        GitHub:
+        <a
+        href="<?php echo $socialLinks['github'] ?? '#'; ?>"
+        target="_blank"
+        >
+        <?php
+        echo $socialLinks['github']
+        ?? "No GitHub";
+        ?>
+        </a>
+    </p>
 
-<?php
+    <h3>Published Articles</h3>
 
-echo $author['name'];
+    <?php
 
-?>
+    if (!empty($articles)) {
 
-</h3>
+        foreach ($articles as $article) {
 
-<h3>Bio</h3>
+            echo "<p>" .
+            $article['title'] .
+            "</p>";
+        }
 
-<p>
+    } else {
 
-<?php
-
-echo $author['bio']
-
-?? "No bio added";
-
-?>
-
-</p>
-
-<h3>Social Links</h3>
-
-<p>
-
-Twitter:
-
-<a
-
-href="<?php echo $socialLinks['twitter'] ?? '#'; ?>"
-
-target="_blank"
-
->
-
-<?php
-
-echo $socialLinks['twitter']
-
-?? "No Twitter";
-
-?>
-
-</a>
-
-</p>
-
-<p>
-
-GitHub:
-
-<a
-
-href="<?php echo $socialLinks['github'] ?? '#'; ?>"
-
-target="_blank"
-
->
-
-<?php
-
-echo $socialLinks['github']
-
-?? "No GitHub";
-
-?>
-
-</a>
-
-</p>
-
-<h3>Published Articles</h3>
-
-<?php
-
-if(!empty($articles)){
-
-    foreach($articles as $article){
-
-?>
-
-<p>
-
-<?php
-
-echo $article['title'];
-
-?>
-
-</p>
-
-<?php
-
+        echo "No published articles found";
     }
 
-}else{
+    ?>
 
-    echo "No published articles found";
+    <br><br>
 
-}
-
-?>
-
-<br><br>
-
-<a href="../../Public/index.php">
-
-Home
-
-</a>
+    <a href="../../Public/index.php">
+        Home
+    </a>
 
 </div>
 
