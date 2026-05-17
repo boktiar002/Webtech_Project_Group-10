@@ -1,17 +1,12 @@
 <?php
 
-<<<<<<< HEAD
 ini_set('display_errors', 1);
+
 error_reporting(E_ALL);
 
 session_start();
 
-include("../Config/Database.php");
-=======
-session_start();
-
 include("../Config/database.php");
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 
 // ==========================
@@ -21,7 +16,6 @@ include("../Config/database.php");
 if(isset($_POST['register'])){
 
     $name = trim($_POST['name']);
-<<<<<<< HEAD
 
     $email = trim($_POST['email']);
 
@@ -36,9 +30,13 @@ if(isset($_POST['register'])){
 
     if(
 
-        empty($name) ||
+        empty($name)
 
-        empty($email) ||
+        ||
+
+        empty($email)
+
+        ||
 
         empty($password)
 
@@ -49,6 +47,7 @@ if(isset($_POST['register'])){
         exit();
 
     }
+
 
     if(
 
@@ -68,11 +67,8 @@ if(isset($_POST['register'])){
 
     }
 
-    if(
 
-        strlen($password) < 8
-
-    ){
+    if(strlen($password) < 8){
 
         echo "Password must be at least 8 characters";
 
@@ -84,31 +80,6 @@ if(isset($_POST['register'])){
     // ==========================
     // CHECK EMAIL
     // ==========================
-=======
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $selectedRole = $_POST['role'];
-
-    // Validation
-
-    if(
-        empty($name) ||
-        empty($email) ||
-        empty($password)
-    ){
-
-        die("All fields are required");
-
-    }
-
-    if(strlen($password) < 8){
-
-        die("Password must be at least 8 characters");
-
-    }
-
-    // Email Check
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
     $checkQuery =
 
@@ -116,10 +87,11 @@ if(isset($_POST['register'])){
     FROM users
     WHERE email=?";
 
+
     $stmt =
-    $conn->prepare(
-        $checkQuery
-    );
+
+    $conn->prepare($checkQuery);
+
 
     $stmt->execute([
 
@@ -127,7 +99,7 @@ if(isset($_POST['register'])){
 
     ]);
 
-<<<<<<< HEAD
+
     if($stmt->rowCount() > 0){
 
         echo "Email already exists";
@@ -159,29 +131,6 @@ if(isset($_POST['register'])){
     // ==========================
     // PASSWORD HASH
     // ==========================
-=======
-    if($stmt->rowCount()>0){
-
-        die("Email already exists");
-
-    }
-
-    // Role Logic
-
-    if($selectedRole=="author"){
-
-        $role="reader";
-        $pending=1;
-
-    }else{
-
-        $role="reader";
-        $pending=0;
-
-    }
-
-    // Password Hash
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
     $hashedPassword =
 
@@ -193,42 +142,32 @@ if(isset($_POST['register'])){
 
     );
 
-<<<<<<< HEAD
 
     // ==========================
     // INSERT USER
     // ==========================
-=======
-    // Insert User
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
     $insertQuery =
 
     "INSERT INTO users
     (
-<<<<<<< HEAD
         name,
         email,
         password_hash,
         role,
         pending_author
-=======
-    name,
-    email,
-    password_hash,
-    role,
-    pending_author
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     )
 
     VALUES(?,?,?,?,?)";
 
+
     $stmt =
-    $conn->prepare(
-        $insertQuery
-    );
+
+    $conn->prepare($insertQuery);
+
 
     $result =
+
     $stmt->execute([
 
         $name,
@@ -239,10 +178,7 @@ if(isset($_POST['register'])){
 
     ]);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     if($result){
 
         echo "Registration Successful";
@@ -253,11 +189,8 @@ if(isset($_POST['register'])){
 
     }
 
-<<<<<<< HEAD
     exit();
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 }
 
 
@@ -268,22 +201,15 @@ if(isset($_POST['register'])){
 
 if(isset($_POST['login'])){
 
-    $email =
-    trim(
-        $_POST['email']
-    );
+    $email = trim($_POST['email']);
 
-    $password =
-    $_POST['password'];
+    $password = $_POST['password'];
 
-<<<<<<< HEAD
 
     // ==========================
     // VALIDATION
     // ==========================
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     if(
 
         empty($email)
@@ -294,7 +220,6 @@ if(isset($_POST['login'])){
 
     ){
 
-<<<<<<< HEAD
         echo "All fields required";
 
         exit();
@@ -305,15 +230,6 @@ if(isset($_POST['login'])){
     // ==========================
     // FIND USER
     // ==========================
-=======
-        die(
-            "All fields required"
-        );
-
-    }
-
-    // Find User
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
     $query =
 
@@ -321,10 +237,11 @@ if(isset($_POST['login'])){
     FROM users
     WHERE email=?";
 
+
     $stmt =
-    $conn->prepare(
-        $query
-    );
+
+    $conn->prepare($query);
+
 
     $stmt->execute([
 
@@ -332,15 +249,12 @@ if(isset($_POST['login'])){
 
     ]);
 
+
     $user =
-    $stmt->fetch(
-        PDO::FETCH_ASSOC
-    );
 
-<<<<<<< HEAD
+    $stmt->fetch(PDO::FETCH_ASSOC);
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
+
     if($user){
 
         if(
@@ -355,50 +269,47 @@ if(isset($_POST['login'])){
 
         ){
 
-<<<<<<< HEAD
+
             // ==========================
             // SESSION
             // ==========================
-=======
-            // SESSION
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
             $_SESSION['user_id']
+
             =
+
             $user['id'];
 
             $_SESSION['name']
+
             =
+
             $user['name'];
 
             $_SESSION['role']
+
             =
+
             $user['role'];
 
 
-<<<<<<< HEAD
             // ==========================
             // REMEMBER ME
             // ==========================
-=======
 
-            // REMEMBER ME
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
-
-            if(
-
-                isset(
-                    $_POST['remember_me']
-                )
-
-            ){
+            if(isset($_POST['remember_me'])){
 
                 $token =
+
                 bin2hex(
+
                     random_bytes(32)
+
                 );
 
+
                 $hashedToken =
+
                 password_hash(
 
                     $token,
@@ -407,23 +318,18 @@ if(isset($_POST['login'])){
 
                 );
 
+
                 $updateQuery =
 
                 "UPDATE users
-<<<<<<< HEAD
                 SET remember_token=?
-=======
-                SET
-                remember_token=?
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
                 WHERE id=?";
 
+
                 $updateStmt =
-                $conn->prepare(
 
-                    $updateQuery
+                $conn->prepare($updateQuery);
 
-                );
 
                 $updateStmt->execute([
 
@@ -432,6 +338,7 @@ if(isset($_POST['login'])){
                     $user['id']
 
                 ]);
+
 
                 setcookie(
 
@@ -453,14 +360,11 @@ if(isset($_POST['login'])){
 
             }
 
-<<<<<<< HEAD
 
             // ==========================
             // REDIRECT
             // ==========================
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
             header(
 
                 "Location:../Public/index.php"
@@ -473,22 +377,16 @@ if(isset($_POST['login'])){
 
             echo "Wrong Password";
 
-<<<<<<< HEAD
             exit();
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
         }
 
     }else{
 
         echo "User Not Found";
 
-<<<<<<< HEAD
         exit();
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     }
 
 }

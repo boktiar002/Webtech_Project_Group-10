@@ -10,13 +10,17 @@ if(!isset($_SESSION['user_id'])){
 
 }
 
-if($_SESSION['role']!="admin"){
+if($_SESSION['role'] != "admin"){
 
     die("Admin Only");
 
 }
 
-<<<<<<< HEAD
+
+// ==========================
+// FETCH USERS
+// ==========================
+
 $query = "SELECT * FROM users";
 
 $stmt = $conn->prepare($query);
@@ -24,58 +28,96 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-=======
-$query="SELECT * FROM users";
-
-$stmt=$conn->prepare($query);
-
-$stmt->execute();
-
-$users=$stmt->fetchAll(PDO::FETCH_ASSOC);
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 ?>
 
 <!DOCTYPE html>
-<<<<<<< HEAD
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <html>
 
 <head>
 
-<<<<<<< HEAD
     <title>All Users</title>
-=======
-<title>All Users</title>
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
+
+    <style>
+
+    body{
+
+        font-family:Arial;
+        background:#f4f4f4;
+        padding:40px;
+
+    }
+
+    .container{
+
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+
+    }
+
+    table{
+
+        width:100%;
+        border-collapse:collapse;
+
+    }
+
+    th,
+    td{
+
+        border:1px solid #ccc;
+        padding:12px;
+        text-align:center;
+
+    }
+
+    th{
+
+        background:#111827;
+        color:white;
+
+    }
+
+    button{
+
+        background:#111827;
+        color:white;
+        border:none;
+        padding:8px 15px;
+        border-radius:5px;
+        cursor:pointer;
+
+    }
+
+    button:hover{
+
+        background:#374151;
+
+    }
+
+    </style>
 
 </head>
 
 <body>
 
+<div class="container">
+
 <h1>All Users</h1>
 
-<table border="1" cellpadding="10">
+<table>
 
 <tr>
 
-<<<<<<< HEAD
     <th>ID</th>
     <th>Name</th>
     <th>Email</th>
     <th>Role</th>
     <th>Pending</th>
     <th>Action</th>
-=======
-<th>ID</th>
-<th>Name</th>
-<th>Email</th>
-<th>Role</th>
-<th>Pending</th>
-<th>Action</th>
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 </tr>
 
@@ -83,7 +125,6 @@ $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <tr>
 
-<<<<<<< HEAD
     <td>
 
         <?php echo $user['id']; ?>
@@ -147,55 +188,6 @@ $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php } ?>
 
     </td>
-=======
-<td><?php echo $user['id']; ?></td>
-
-<td><?php echo $user['name']; ?></td>
-
-<td><?php echo $user['email']; ?></td>
-
-<td id="role<?php echo $user['id']; ?>">
-<?php echo $user['role']; ?>
-</td>
-
-<td>
-<?php echo $user['pending_author']; ?>
-</td>
-
-<td>
-
-<?php
-
-if(
-
-$user['pending_author']==1
-
-&&
-
-$user['role']=="reader"
-
-){
-
-?>
-
-<button
-
-onclick="promoteUser(
-
-<?php echo $user['id']; ?>
-
-)"
-
->
-
-Promote To Author
-
-</button>
-
-<?php } ?>
-
-</td>
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 </tr>
 
@@ -203,11 +195,12 @@ Promote To Author
 
 </table>
 
+</div>
+
 <script>
 
 function promoteUser(userId){
 
-<<<<<<< HEAD
     fetch("../../Api/users/promote.php",{
 
         method:"POST",
@@ -224,7 +217,7 @@ function promoteUser(userId){
 
     .then(data=>{
 
-        if(data.success){
+        if(data.status == "success"){
 
             document.getElementById(
 
@@ -233,6 +226,8 @@ function promoteUser(userId){
             ).innerHTML = "author";
 
             alert(data.message);
+
+            location.reload();
 
         }else{
 
@@ -249,46 +244,11 @@ function promoteUser(userId){
         alert("Error");
 
     });
-=======
-fetch("../../api/users/promote.php",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/x-www-form-urlencoded"
-},
-
-body:"user_id="+userId
-
-})
-
-.then(response=>response.text())
-.then(data=>{
-
-console.log(data);
-
-alert("Done");
-
-location.reload();
-
-})
-
-.catch(error=>{
-
-console.log(error);
-
-alert("Error");
-
-});
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }
 
 </script>
 
 </body>
-<<<<<<< HEAD
 
-=======
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </html>
