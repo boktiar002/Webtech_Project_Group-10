@@ -13,7 +13,7 @@ class CategoryController {
         return $this->category->getAll();
     }
 
-    // Create new category
+    // Create New Category
     public function store($name) {
         $name = trim($name);
         if(empty($name)) return false;
