@@ -18,6 +18,7 @@ if(!isset($_SESSION['user_id'])){
 
     <title>Profile</title>
 
+<<<<<<< HEAD
     <style>
 
     body{
@@ -83,12 +84,17 @@ if(!isset($_SESSION['user_id'])){
 
     </style>
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </head>
 
 <body>
 
+<<<<<<< HEAD
 <div class="profile-box">
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <h2>User Profile Management</h2>
 
 <p>
@@ -99,7 +105,11 @@ Update your bio, social links and profile picture
 
 <form
 
+<<<<<<< HEAD
 action="/Webtech_Project_Group-10-main/Controller/ProfileController.php"
+=======
+action="../../Controller/ProfileController.php"
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 method="POST"
 
@@ -110,6 +120,7 @@ enctype="multipart/form-data"
 <label>Bio</label><br>
 
 <textarea
+<<<<<<< HEAD
 
 name="bio"
 
@@ -153,6 +164,41 @@ name="avatar"
 
 accept=".jpg,.jpeg,.png"
 
+=======
+name="bio"
+rows="5"
+cols="40"
+></textarea>
+
+<br><br>
+
+<label>Twitter URL</label><br>
+
+<input
+type="text"
+name="twitter"
+placeholder="https://twitter.com/username"
+>
+
+<br><br>
+
+<label>GitHub URL</label><br>
+
+<input
+type="text"
+name="github"
+placeholder="https://github.com/username"
+>
+
+<br><br>
+
+<label>Profile Picture</label><br>
+
+<input
+type="file"
+name="avatar"
+accept=".jpg,.jpeg,.png"
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 >
 
 <p>
@@ -161,12 +207,20 @@ Accepted formats: JPG, JPEG, PNG
 
 </p>
 
+<<<<<<< HEAD
 <button
 
 type="submit"
 
 name="update_profile"
 
+=======
+<br><br>
+
+<button
+type="submit"
+name="update_profile"
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 >
 
 Update Profile
@@ -175,8 +229,11 @@ Update Profile
 
 </form>
 
+<<<<<<< HEAD
 </div>
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </body>
 
 </html>

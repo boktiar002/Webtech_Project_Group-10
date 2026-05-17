@@ -123,15 +123,25 @@ if(
 
     $image =
 
+<<<<<<< HEAD
 "/Webtech_Project_Group-10-main/" .
 
 $author['profile_pic_path'];
+=======
+    "/Webtech_Project_Group-10/" .
+
+    $author['profile_pic_path'];
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }else{
 
     $image =
 
+<<<<<<< HEAD
     "/Webtech_Project_Group-10-main/Public/uploads/avatars/default.png";
+=======
+    "/Webtech_Project_Group-10/Public/uploads/avatars/default.png";
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }
 
@@ -164,8 +174,11 @@ alt="Profile Image"
 
 >
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <br><br>
 
 

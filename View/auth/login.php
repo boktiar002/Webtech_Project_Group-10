@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 
+<<<<<<< HEAD
+=======
+<!-- Authentication Login Page -->
+
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <html>
 
 <head>
 
     <title>Login</title>
 
+<<<<<<< HEAD
     <style>
 
     body{
@@ -64,12 +70,17 @@
 
     </style>
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </head>
 
 <body>
 
+<<<<<<< HEAD
 <div class="login-box">
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <h2>Login Form</h2>
 
 <p>
@@ -80,7 +91,11 @@ Enter your email and password to continue
 
 <form
 
+<<<<<<< HEAD
 action="/Webtech_Project_Group-10-main/Controller/AuthController.php"
+=======
+action="/Webtech_Project_Group-10/Controller/AuthController.php"
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 method="POST"
 
@@ -98,6 +113,11 @@ method="POST"
 
     >
 
+<<<<<<< HEAD
+=======
+    <br><br>
+
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     <label>Password</label><br>
 
     <input
@@ -110,6 +130,11 @@ method="POST"
 
     >
 
+<<<<<<< HEAD
+=======
+    <br><br>
+
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     <input
 
         type="checkbox"
@@ -150,8 +175,11 @@ Register Here
 
 </p>
 
+<<<<<<< HEAD
 </div>
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </body>
 
 </html>

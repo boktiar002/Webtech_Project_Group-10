@@ -16,6 +16,7 @@ if($_SESSION['role']!="admin"){
 
 }
 
+<<<<<<< HEAD
 $query = "SELECT * FROM users";
 
 $stmt = $conn->prepare($query);
@@ -23,16 +24,32 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+=======
+$query="SELECT * FROM users";
+
+$stmt=$conn->prepare($query);
+
+$stmt->execute();
+
+$users=$stmt->fetchAll(PDO::FETCH_ASSOC);
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 ?>
 
 <!DOCTYPE html>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 <html>
 
 <head>
 
+<<<<<<< HEAD
     <title>All Users</title>
+=======
+<title>All Users</title>
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 </head>
 
@@ -44,12 +61,21 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <tr>
 
+<<<<<<< HEAD
     <th>ID</th>
     <th>Name</th>
     <th>Email</th>
     <th>Role</th>
     <th>Pending</th>
     <th>Action</th>
+=======
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Role</th>
+<th>Pending</th>
+<th>Action</th>
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 </tr>
 
@@ -57,6 +83,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <tr>
 
+<<<<<<< HEAD
     <td>
 
         <?php echo $user['id']; ?>
@@ -120,6 +147,55 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php } ?>
 
     </td>
+=======
+<td><?php echo $user['id']; ?></td>
+
+<td><?php echo $user['name']; ?></td>
+
+<td><?php echo $user['email']; ?></td>
+
+<td id="role<?php echo $user['id']; ?>">
+<?php echo $user['role']; ?>
+</td>
+
+<td>
+<?php echo $user['pending_author']; ?>
+</td>
+
+<td>
+
+<?php
+
+if(
+
+$user['pending_author']==1
+
+&&
+
+$user['role']=="reader"
+
+){
+
+?>
+
+<button
+
+onclick="promoteUser(
+
+<?php echo $user['id']; ?>
+
+)"
+
+>
+
+Promote To Author
+
+</button>
+
+<?php } ?>
+
+</td>
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 </tr>
 
@@ -131,6 +207,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 function promoteUser(userId){
 
+<<<<<<< HEAD
     fetch("../../Api/users/promote.php",{
 
         method:"POST",
@@ -172,11 +249,46 @@ function promoteUser(userId){
         alert("Error");
 
     });
+=======
+fetch("../../api/users/promote.php",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+
+body:"user_id="+userId
+
+})
+
+.then(response=>response.text())
+.then(data=>{
+
+console.log(data);
+
+alert("Done");
+
+location.reload();
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+alert("Error");
+
+});
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 
 }
 
 </script>
 
 </body>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </html>
