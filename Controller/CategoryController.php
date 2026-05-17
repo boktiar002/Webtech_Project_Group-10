@@ -22,7 +22,7 @@ class CategoryController {
         exit();
     }
 
-    // Delete category
+    // Delete Category
     public function delete($id) {
         return $this->category->delete($id);
     }
