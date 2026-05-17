@@ -1,5 +1,0 @@
-<?php
-
-// User model placeholder
-
-?>

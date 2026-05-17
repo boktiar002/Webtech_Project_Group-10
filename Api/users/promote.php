@@ -71,18 +71,18 @@ $userId = $_POST['user_id'];
 // PROMOTE QUERY
 // ==========================
 
-$query =
+$query = "
 
-"UPDATE users
+UPDATE users
 SET
 role='author',
 pending_author=0
-WHERE id=?";
+WHERE id=?
+
+";
 
 
-$stmt =
-
-$conn->prepare($query);
+$stmt = $conn->prepare($query);
 
 
 if($stmt->execute([$userId])){
