@@ -123,15 +123,15 @@ if(
 
     $image =
 
-    "/Webtech_Project_Group-10/" .
+"/Webtech_Project_Group-10-main/" .
 
-    $author['profile_pic_path'];
+$author['profile_pic_path'];
 
 }else{
 
     $image =
 
-    "/Webtech_Project_Group-10/Public/uploads/avatars/default.png";
+    "/Webtech_Project_Group-10-main/Public/uploads/avatars/default.png";
 
 }
 
@@ -163,6 +163,8 @@ height="150"
 alt="Profile Image"
 
 >
+
+
 
 <br><br>
 
