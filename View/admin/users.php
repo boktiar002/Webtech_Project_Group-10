@@ -16,22 +16,23 @@ if($_SESSION['role']!="admin"){
 
 }
 
-$query="SELECT * FROM users";
+$query = "SELECT * FROM users";
 
-$stmt=$conn->prepare($query);
+$stmt = $conn->prepare($query);
 
 $stmt->execute();
 
-$users=$stmt->fetchAll(PDO::FETCH_ASSOC);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-<title>All Users</title>
+    <title>All Users</title>
 
 </head>
 
@@ -43,12 +44,12 @@ $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <tr>
 
-<th>ID</th>
-<th>Name</th>
-<th>Email</th>
-<th>Role</th>
-<th>Pending</th>
-<th>Action</th>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Pending</th>
+    <th>Action</th>
 
 </tr>
 
@@ -56,53 +57,69 @@ $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <tr>
 
-<td><?php echo $user['id']; ?></td>
+    <td>
 
-<td><?php echo $user['name']; ?></td>
+        <?php echo $user['id']; ?>
 
-<td><?php echo $user['email']; ?></td>
+    </td>
 
-<td id="role<?php echo $user['id']; ?>">
-<?php echo $user['role']; ?>
-</td>
+    <td>
 
-<td>
-<?php echo $user['pending_author']; ?>
-</td>
+        <?php echo $user['name']; ?>
 
-<td>
+    </td>
 
-<?php
+    <td>
 
-if(
+        <?php echo $user['email']; ?>
 
-$user['pending_author']==1
+    </td>
 
-&&
+    <td id="role<?php echo $user['id']; ?>">
 
-$user['role']=="reader"
+        <?php echo $user['role']; ?>
 
-){
+    </td>
 
-?>
+    <td>
 
-<button
+        <?php echo $user['pending_author']; ?>
 
-onclick="promoteUser(
+    </td>
 
-<?php echo $user['id']; ?>
+    <td>
 
-)"
+    <?php
 
->
+    if(
 
-Promote To Author
+        $user['pending_author'] == 1
 
-</button>
+        &&
 
-<?php } ?>
+        $user['role'] == "reader"
 
-</td>
+    ){
+
+    ?>
+
+    <button
+
+    onclick="promoteUser(
+
+    <?php echo $user['id']; ?>
+
+    )"
+
+    >
+
+    Promote To Author
+
+    </button>
+
+    <?php } ?>
+
+    </td>
 
 </tr>
 
@@ -114,40 +131,52 @@ Promote To Author
 
 function promoteUser(userId){
 
-fetch("../../api/users/promote.php",{
+    fetch("../../Api/users/promote.php",{
 
-method:"POST",
+        method:"POST",
 
-headers:{
-"Content-Type":"application/x-www-form-urlencoded"
-},
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
 
-body:"user_id="+userId
+        body:"user_id="+userId
 
-})
+    })
 
-.then(response=>response.text())
-.then(data=>{
+    .then(response=>response.json())
 
-console.log(data);
+    .then(data=>{
 
-alert("Done");
+        if(data.success){
 
-location.reload();
+            document.getElementById(
 
-})
+                "role"+userId
 
-.catch(error=>{
+            ).innerHTML = "author";
 
-console.log(error);
+            alert(data.message);
 
-alert("Error");
+        }else{
 
-});
+            alert(data.message);
+
+        }
+
+    })
+
+    .catch(error=>{
+
+        console.log(error);
+
+        alert("Error");
+
+    });
 
 }
 
 </script>
 
 </body>
+
 </html>
