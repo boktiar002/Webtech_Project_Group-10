@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 session_start();
 
-include("../Config/database.php");
+include("Config/database.php");
 
 
 // ==========================

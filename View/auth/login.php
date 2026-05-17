@@ -90,7 +90,7 @@ Enter your email and password to continue
 
 <form
 
-action="/Webtech_Project_Group-10-main/Controller/AuthController.php"
+action="http://localhost/Webtech_Project_Group-10-main/Controller/AuthController.php"
 
 method="POST"
 
