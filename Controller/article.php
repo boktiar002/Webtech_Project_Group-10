@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../data.json'), true);
+$config = $config ?? json_decode(file_get_contents(__DIR__ . '/../data.json'),true);
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header("Location: index.php");
