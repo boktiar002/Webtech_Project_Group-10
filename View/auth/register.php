@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 
 <html>
 
@@ -10,9 +9,11 @@
     <style>
 
     body{
+
         font-family:Arial;
         background:#f4f4f4;
         padding:40px;
+
     }
 
     .register-box{
@@ -27,7 +28,9 @@
     }
 
     h2{
+
         text-align:center;
+
     }
 
     input[type="text"],
@@ -58,6 +61,13 @@
     button:hover{
 
         background:#374151;
+
+    }
+
+    a{
+
+        text-decoration:none;
+        color:blue;
 
     }
 
@@ -143,43 +153,10 @@ method="POST"
 
     >
 
-=======
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-
-<h2>Registration Form</h2>
-
-<form action="../../Controller/AuthController.php" method="POST">
-
-    <label>Name</label><br>
-    <input type="text" name="name"><br><br>
-
-    <label>Email</label><br>
-    <input type="email" name="email"><br><br>
-
-    <label>Password</label><br>
-    <input
-type="password"
-name="password"
-minlength="8"
-required
-><br><br>
-
-    <label>Select Role</label><br>
-
-    <input type="radio" name="role" value="reader" checked>
-    Reader
-
-    <input type="radio" name="role" value="author">
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     Author
 
     <br><br>
 
-<<<<<<< HEAD
     <button
 
     type="submit"
@@ -190,15 +167,10 @@ required
 
     Register
 
-=======
-    <button type="submit" name="register">
-        Register
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
     </button>
 
 </form>
 
-<<<<<<< HEAD
 <br>
 
 <p>
@@ -217,7 +189,4 @@ Login Here
 
 </body>
 
-=======
-</body>
->>>>>>> 247e429fe6d54bd0cc0d546c5726ee9b632ac2e2
 </html>
