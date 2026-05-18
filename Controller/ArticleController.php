@@ -58,6 +58,8 @@ class ArticleController {
             header("Location: /Webtech_Project_Group-10/index.php?page=dashboard");
             exit();
         }
+
+        return $errors;
     }
 
     // DELETE
@@ -129,6 +131,8 @@ class ArticleController {
             header("Location: /Webtech_Project_Group-10/index.php?page=dashboard");
             exit();
         }
+
+        return $errors;
     }
 }
 ?>
