@@ -4,7 +4,6 @@ async function deleteReportedComment(commentId, reportId) {
     }
 
     try {
-        // Path uppercase 'Api' formatting checked securely
         const response = await fetch('/Webtech_Project_Group-10/Api/reports/delete_comment.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -36,7 +35,6 @@ async function dismissReport(reportId) {
     }
 
     try {
-        // Path case sensitivity mapping standard checked
         const response = await fetch('/Webtech_Project_Group-10/Api/reports/clear.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

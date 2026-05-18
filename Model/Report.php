@@ -25,7 +25,6 @@ class Report {
     }
 
     public function getAllReports() {
-        // Safe mapping with regular text fields
         return $this->conn->query("SELECT
                 reported_comments.id,
                 reported_comments.reason,

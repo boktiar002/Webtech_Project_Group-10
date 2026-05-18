@@ -18,7 +18,6 @@ async function submitComment(articleId) {
     }
 
     try {
-        // Path align করা হয়েছে সরাসরি Api ফোল্ডারের সাথে
         const response = await fetch('/Webtech_Project_Group-10/Api/comment_create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -32,7 +31,7 @@ async function submitComment(articleId) {
 
         if (result.success) {
             if (bodyField) bodyField.value = '';
-            window.location.reload(); // কমেন্ট পোস্ট হওয়ার পর পেজ রিফ্রেশ করে কমেন্ট দেখাবে
+            window.location.reload();
         } else if (messageDiv) {
             messageDiv.innerHTML = `<span style="color:#dc2626;">${result.message}</span>`;
         }
@@ -75,7 +74,6 @@ async function sendReport() {
     }
 
     try {
-        // FIX: তোমার ফোল্ডার স্ট্রাকচার (Api -> report -> create.php) অনুযায়ী পাথ সেট করা হয়েছে
         const response = await fetch('/Webtech_Project_Group-10/Api/report/create.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -13,7 +13,6 @@ class ModerationController {
 
     public function listAllReports() {
         $result = $this->report->getAllReports();
-        // Fixed: Fetching using mysqli instead of PDO
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
