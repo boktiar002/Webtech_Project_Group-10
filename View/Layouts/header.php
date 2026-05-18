@@ -76,7 +76,7 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
             margin-left: 20px;
             font-size: 14px;
         }
-        nav .nav-links a:hover { color: #aaa; }
+        nav .nav-links a:hover { color: #ffffff; }
 
 
 
@@ -127,7 +127,7 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
         📰 <?= $config['site_name'] ?>
     </a>
 
-    
+
     <div class="search-wrapper">
         <input type="text" id="search-input"
             placeholder="Search articles..."
