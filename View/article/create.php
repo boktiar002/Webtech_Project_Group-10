@@ -11,7 +11,7 @@ $categoryController = new CategoryController();
 $errors = [];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $controller->store();
+    $errors = $controller->store() ?? [];
 }
 
 $categories = $categoryController->index();
