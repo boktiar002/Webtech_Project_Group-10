@@ -5,6 +5,8 @@ if(session_status() === PHP_SESSION_NONE)
 $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'));
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,17 +14,22 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($config['site_name'] ?? 'BlogNews Platform') ?></title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+
+
+        *{ margin: 0; padding: 0; box-sizing: border-box; }
+
         body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
 
-        nav {
+        nav{
             background: #1a1a2e;
             padding: 14px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        nav .logo {
+        nav.logo {
             color: white;
             font-size: 20px;
             font-weight: bold;
@@ -62,13 +69,16 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
         }
         #search-dropdown a:hover { background: #f5f5f5; }
 
+
         nav .nav-links a {
             color: white;
             text-decoration: none;
             margin-left: 20px;
             font-size: 14px;
         }
-        nav .nav-links a:hover { color: #aaa; }
+        nav .nav-links a:hover { color: #ffffff; }
+
+
 
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
 
@@ -84,18 +94,19 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
             background: #1a1a2e;
             color: white;
         }
+
         .card {
             background: white;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        .card img { width: 100%; height: 180px; object-fit: cover; }
-        .card-body { padding: 14px; }
-        .card-body h3 { font-size: 15px; margin-bottom: 8px; }
-        .card-body h3 a { text-decoration: none; color: #1a1a2e; }
+        .card img{ width: 100%; height: 180px; object-fit: cover; }
+        .card-body{ padding: 14px; }
+        .card-body h3{ font-size: 15px; margin-bottom: 8px; }
+        .card-body h3 a{ text-decoration: none; color: #1a1a2e; }
         .card-meta { font-size: 12px; color: #888; display:flex; gap:10px; flex-wrap:wrap; }
-        .badge {
+        .badge{
             background: #1a1a2e;
             color: white;
             padding: 2px 8px;
@@ -105,6 +116,8 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
         #like-btn { transition: transform 0.1s; }
         #like-btn:active { transform: scale(0.95); }
         #like-btn.liked { background: #e74c3c; }
+
+
     </style>
 </head>
 <body>
@@ -114,12 +127,14 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
         📰 <?= $config['site_name'] ?>
     </a>
 
+
     <div class="search-wrapper">
         <input type="text" id="search-input"
             placeholder="Search articles..."
             onkeyup="liveSearch()">
         <div id="search-dropdown"></div>
     </div>
+
 
     <div class="nav-links">
         <a href="<?= $appRoot ?>/index.php">Home</a>
@@ -132,6 +147,8 @@ $appRoot = str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')
         <?php endif; ?>
     </div>
 </nav>
+
+
 
 <script>const APP_ROOT = '<?= $appRoot ?>';</script>
 <script src="<?= $appRoot ?>/Controller/JS/ajax.js"></script>
